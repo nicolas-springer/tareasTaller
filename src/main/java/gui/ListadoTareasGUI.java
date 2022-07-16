@@ -28,7 +28,7 @@ public class ListadoTareasGUI extends JFrame {
 	private JTable tableTareas;
 	
 	public ListadoTareasGUI() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(300, 150, 1280, 720);
 		setResizable(false);
 		setTitle("Gestion Tareas");

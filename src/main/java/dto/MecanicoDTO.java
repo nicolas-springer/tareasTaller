@@ -4,7 +4,6 @@ public class MecanicoDTO {
 
 	private String apellido;
 	private String nombre;
-	private String tipoDocumento;
 	private Integer numeroDocumento;
 	private String telefono;
 	private String provincia;
@@ -27,12 +26,7 @@ public class MecanicoDTO {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public String getTipoDocumento() {
-		return tipoDocumento;
-	}
-	public void setTipoDocumento(String tipoDocumento) {
-		this.tipoDocumento = tipoDocumento;
-	}
+
 	public Integer getNumeroDocumento() {
 		return numeroDocumento;
 	}

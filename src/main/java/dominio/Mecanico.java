@@ -15,6 +15,9 @@ public class Mecanico {
     @JoinColumn(name= "id_persona" , referencedColumnName = "idpersona")
     private Persona persona;
 	
+	@Column
+	private String especialidad;
+	
 
 	public Mecanico(Integer idMecanico) {
 		this.idMecanico = idMecanico;
@@ -41,6 +44,14 @@ public class Mecanico {
 
 	public void inicializarMecanico(Persona persona) {
 		this.setPersona(persona);
+	}
+
+	public String getEspecialidad() {
+		return especialidad;
+	}
+
+	public void setEspecialidad(String especialidad) {
+		this.especialidad = especialidad;
 	}
 
 	

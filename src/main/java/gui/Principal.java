@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import java.awt.SystemColor;
 
 @SuppressWarnings("serial")
 public class Principal extends JFrame {
@@ -32,25 +33,40 @@ public class Principal extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 
 		JPanel panelCentral = new JPanel();
-		panelCentral.setBackground(new Color(102, 204, 255));
+		panelCentral.setBackground(SystemColor.control);
 		contentPane.add(panelCentral, BorderLayout.CENTER);
 		panelCentral.setLayout(null);
 
 		JButton btnGestionarTareas = new JButton("Gestionar Tareas");
 		btnGestionarTareas.setBackground(Color.WHITE);
 		btnGestionarTareas.setFont(new Font("Dialog", Font.PLAIN, 20));
-		btnGestionarTareas.setBounds(362, 196, 250, 80);
+		btnGestionarTareas.setBounds(323, 226, 250, 80);
 		panelCentral.add(btnGestionarTareas);
 
 		JButton btnGestionarStock = new JButton("Gestionar Stock");
 		btnGestionarStock.setBackground(Color.WHITE);
 		btnGestionarStock.setFont(new Font("Dialog", Font.PLAIN, 20));
-		btnGestionarStock.setBounds(362, 372, 250, 80);
+		btnGestionarStock.setBounds(690, 226, 250, 80);
 		panelCentral.add(btnGestionarStock);
+		
+		JButton btnGestionarMecanicos = new JButton("Gestionar Mecanicos");
+		btnGestionarMecanicos.setFont(new Font("Dialog", Font.PLAIN, 20));
+		btnGestionarMecanicos.setBackground(Color.WHITE);
+		btnGestionarMecanicos.setBounds(323, 377, 250, 80);
+		panelCentral.add(btnGestionarMecanicos);
+		
+		JButton btnGestionarClientes = new JButton("Gestionar Clientes");
+		btnGestionarClientes.setFont(new Font("Dialog", Font.PLAIN, 20));
+		btnGestionarClientes.setBackground(Color.WHITE);
+		btnGestionarClientes.setBounds(690, 377, 250, 80);
+		panelCentral.add(btnGestionarClientes);
 
 
 		final ListadoTareasGUI listadoTareas = new ListadoTareasGUI();
-
+		final AltaMecanicoGUI altaMecanico = new AltaMecanicoGUI();
+		final AltaClienteGUI altaCliente = new AltaClienteGUI();
+		// final GestionStockGUI gestionStock = new
+		
 		btnGestionarTareas.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -60,6 +76,32 @@ public class Principal extends JFrame {
 			}
 		});
 
+		btnGestionarStock.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				listadoTareas.setVisible(true);
+				dispose();
+			}
+		});
+		
+		btnGestionarMecanicos.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				altaMecanico.setVisible(true);
+				//dispose();
+			}
+		});
+		
+		btnGestionarClientes.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				altaCliente.setVisible(true);
+				dispose();
+			}
+		});
 //		//btnGestionarListado.addActionListener(new ActionListener() {
 //			@Override
 //			public void actionPerformed(ActionEvent e) {

@@ -1,5 +1,7 @@
 package dominio;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 @Entity (name= "provincia")
@@ -12,6 +14,9 @@ public class Provincia {
     private Integer idProvincia;
     
     private String nombre;
+    
+    @OneToMany(mappedBy="provincia")
+    private List<Localidad> localidades;
 
 	public Integer getIdProvincia() {
 		return idProvincia;

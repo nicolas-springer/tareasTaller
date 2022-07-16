@@ -7,7 +7,7 @@
 
 
 
-    <persistence-unit name="aplicaciontaller">
+   <persistence-unit name="aplicaciontaller">
     
     	<class> dominio.Provincia</class>
     	<class> dominio.Localidad</class>

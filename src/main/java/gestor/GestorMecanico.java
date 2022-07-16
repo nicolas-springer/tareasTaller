@@ -1,6 +1,7 @@
 package gestor;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import dao.MecanicoDAO;
@@ -35,6 +36,12 @@ public class GestorMecanico {
 		else
 			throw new Exception("No se pude dar de alta el nuevo mecanico");
 
+	}
+
+	public Boolean validarDatosMecanico(JTextField textFieldApellido, JTextField textFieldNombre,
+			JTextField textFieldDNI, JTextField textFieldTelefono) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

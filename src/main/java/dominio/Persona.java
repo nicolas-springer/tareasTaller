@@ -16,7 +16,6 @@ public class Persona {
 	@Column
 	private String apellido;
 	private String nombre;
-	private String tipoDocumento;
 	private Integer numeroDocumento;
 	
 	@OneToOne(fetch=FetchType.LAZY)
@@ -31,21 +30,16 @@ public class Persona {
 
 	}
 
-	public Persona(String apellido, String nombre, String tipoDocumento, Integer numeroDocumento, Direccion direccion,
+	public Persona(String apellido, String nombre, Integer numeroDocumento, Direccion direccion,
 			String cuit,String telefono) {
 		super();
 		this.apellido = apellido;
 		this.nombre = nombre;
-		this.tipoDocumento = tipoDocumento;
 		this.numeroDocumento = numeroDocumento;
 		this.direccion = direccion;
 		this.cuit = cuit;
 		this.telefono = telefono;
 
-	}
-
-	public void setTipoDocumento(String tipoDocumento) {
-		this.tipoDocumento = tipoDocumento;
 	}
 
 	public String getApellido() {
@@ -62,11 +56,6 @@ public class Persona {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
-
-	public String getTipoDocumento() {
-		return tipoDocumento;
-
 	}
 
 	public Integer getNumeroDocumento() {
@@ -133,7 +122,6 @@ public class Persona {
 	public void inicializarPersona(MecanicoDTO mecanicoDTO, Direccion dir) {
 		this.setApellido(mecanicoDTO.getApellido());
 		this.setNombre(mecanicoDTO.getNombre());
-		this.setTipoDocumento(mecanicoDTO.getTipoDocumento());
 		this.setNumeroDocumento(mecanicoDTO.getNumeroDocumento());
 		this.setDireccion(dir);
 		this.setTelefono(mecanicoDTO.getTelefono());

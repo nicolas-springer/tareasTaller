@@ -20,11 +20,12 @@ public class App {
 			}
 		});
 	}
+	
 	/*public static void main(String[] args) {
 		
 
 		ConnectionBD bd = new ConnectionBD();
-		System.out.println(bd.conectar());
+		System.out.println(ConnectionBD.conectar());
 	}*/
 }
 
