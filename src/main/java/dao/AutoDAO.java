@@ -11,5 +11,9 @@ public interface AutoDAO {
 
 	void guardarAuto(Auto auto);
 
+	List<Auto> recuperarAutosDeClienteID(int id);
+
+	Auto recuperarAutoConPatente(String pat);
+
 	
 }

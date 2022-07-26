@@ -12,6 +12,7 @@ public class MecanicoDTO {
 	private Integer numeroCalle;
 	private Integer departamento;
 	private Integer piso;
+	private String especialidad;
 	
 	
 	public String getApellido() {
@@ -74,6 +75,12 @@ public class MecanicoDTO {
 	}
 	public void setPiso(Integer piso) {
 		this.piso = piso;
+	}
+	public String getEspecialidad() {
+		return especialidad;
+	}
+	public void setEspecialidad(String especialidad) {
+		this.especialidad = especialidad;
 	}
 	
 	

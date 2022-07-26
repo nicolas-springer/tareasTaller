@@ -27,7 +27,10 @@ public class GestorTarea {
 		
 		t.setFechaCreacion(LocalDate.now());
 		t.setEstado(EstadoTarea.PENDIENTE);
+		
 		daoTarea.guardarTarea(t);
+		
+		
 		
 		return t;
 	}

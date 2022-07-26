@@ -10,4 +10,6 @@ public interface ProvinciaDAO {
 	Integer obtenerIdDe(String prov);
 
 	List<Provincia> recuperarProvincias();
+
+	void cargarProvinciasBD();
 }

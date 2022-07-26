@@ -40,7 +40,7 @@ public class AltaMecanicoGUI extends JFrame {
 	private JTextField textFieldPiso;
 	private JTextField textFieldDepto;
 	private JTextField textFieldNumero;
-	private JTextField textField_4;
+	private JTextField textEspecialidad;
 	private JTextField textFieldNombre;
 	private JTextField textFieldApellido;
 	private JTextField textFieldTelefono;
@@ -91,16 +91,16 @@ public class AltaMecanicoGUI extends JFrame {
 		comboBoxProvincias.setBounds(90, 121, 118, 22);
 		contentPane.add(comboBoxProvincias);
 		//comboBoxProvincias.addItem("Santa Fe");
-		/*for (Provincia p : listaProvinciasArg) {
+		for (Provincia p : listaProvinciasArg) {
 			comboBoxProvincias.addItem(p.getNombre().toString());
-		}*/
+		}
 		
 		JLabel lblNewLabel_5 = new JLabel("Localidad:");
 		lblNewLabel_5.setBounds(218, 125, 68, 14);
 		contentPane.add(lblNewLabel_5);
 		
 		JComboBox<String> comboBoxLocalidad = new JComboBox<String>();
-		comboBoxLocalidad.setBounds(270, 121, 182, 22);
+		comboBoxLocalidad.setBounds(280, 121, 182, 22);
 		contentPane.add(comboBoxLocalidad);
 		
 		JLabel lblNewLabel_6 = new JLabel("Calle:");
@@ -140,7 +140,7 @@ public class AltaMecanicoGUI extends JFrame {
 		contentPane.add(lblNewLabel_9);
 		
 		textFieldNumero = new JTextField();
-		textFieldNumero.setBounds(366, 147, 86, 20);
+		textFieldNumero.setBounds(376, 147, 86, 20);
 		contentPane.add(textFieldNumero);
 		textFieldNumero.setColumns(10);
 		
@@ -148,19 +148,19 @@ public class AltaMecanicoGUI extends JFrame {
 		lblNewLabel_10.setBounds(25, 225, 86, 14);
 		contentPane.add(lblNewLabel_10);
 		
-		textField_4 = new JTextField();
-		textField_4.setBounds(25, 250, 427, 49);
-		contentPane.add(textField_4);
-		textField_4.setColumns(10);
+		textEspecialidad = new JTextField();
+		textEspecialidad.setBounds(25, 250, 437, 49);
+		contentPane.add(textEspecialidad);
+		textEspecialidad.setColumns(10);
 		
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.setBounds(25, 327, 89, 23);
 		contentPane.add(btnCancelar);
 		
-		JButton btnNewButton = new JButton("Dar de alta");
-		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnNewButton.setBounds(345, 327, 107, 23);
-		contentPane.add(btnNewButton);
+		JButton btnDarAlta = new JButton("Dar de alta");
+		btnDarAlta.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnDarAlta.setBounds(345, 327, 107, 23);
+		contentPane.add(btnDarAlta);
 		
 		textFieldNombre = new JTextField();
 		textFieldNombre.setBounds(90, 50, 197, 20);
@@ -182,10 +182,6 @@ public class AltaMecanicoGUI extends JFrame {
 		textFieldTelefono.setColumns(10);
 		
 		
-		
-		
-		
-		
 		//al seleccionar una provincia del drop box se van a mostrar las localidades de dicha provincia
 		comboBoxProvincias.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -205,7 +201,7 @@ public class AltaMecanicoGUI extends JFrame {
 			}
 		});
 
-		btnNewButton.addActionListener(new ActionListener() {
+		btnDarAlta.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
@@ -226,8 +222,7 @@ public class AltaMecanicoGUI extends JFrame {
 
 					try {
 
-						Boolean validarDatosMec = gMecanico.validarDatosMecanico(textFieldApellido,textFieldNombre,textFieldDNI,textFieldTelefono);
-						//Boolean validarDatosDir = gDireccion.validarDatosDireccion(textFieldCalle,textFieldNumero,textFieldPiso,textFieldDepto);
+						Boolean validarDatosMec = gMecanico.validarDatosMecanico(textFieldApellido,textFieldNombre,textFieldDNI,textFieldTelefono,textFieldCalle,textFieldNumero,textFieldPiso,textFieldDepto);
 						if (validarDatosMec) {
 							System.out.println(validarDatosMec);
 							MecanicoDTO mecDTO= new MecanicoDTO();
@@ -237,32 +232,39 @@ public class AltaMecanicoGUI extends JFrame {
 							mecDTO.setNumeroDocumento(Integer.parseInt(textFieldDNI.getText().toString()));
 							mecDTO.setTelefono(textFieldTelefono.getText().toString());
 							mecDTO.setProvincia(comboBoxProvincias.getSelectedItem().toString());
-							//mecDTO.setLocalidad(90);
 							mecDTO.setCalle(textFieldCalle.getText().toString());
 							mecDTO.setNumeroCalle(Integer.parseInt(textFieldNumero.getText().toString()));
-
+							mecDTO.setLocalidad(comboBoxLocalidad.getSelectedItem().toString());
+							System.out.println(comboBoxLocalidad.getSelectedItem().toString());
+							mecDTO.setProvincia(comboBoxProvincias.getSelectedItem().toString());
+							System.out.println(comboBoxProvincias.getSelectedItem().toString());
+							//en caso de no vivir en departamento se asigna 0 como valor default
 							if (!textFieldDepto.getText().isEmpty())
 								mecDTO.setDepartamento(Integer.parseInt(textFieldDepto.getText().toString()));
+							else mecDTO.setDepartamento(0); 
+								
+								
 							if (!textFieldPiso.getText().isEmpty())
 								mecDTO.setPiso(Integer.parseInt(textFieldPiso.getText().toString()));
-	
+							else mecDTO.setPiso(0);
+							
+							
+							if(textEspecialidad.getText().isEmpty()) {
+								mecDTO.setEspecialidad("no aclara");
+							}
+							else mecDTO.setEspecialidad(textEspecialidad.getText());
 							try {
 								gMecanico.darDeAltaMecanico(mecDTO);
 								JOptionPane.showMessageDialog(null, "Datos cargados correctamente");
-								final GestionMecanicosGUI ventanaGestion = new GestionMecanicosGUI();
-								ventanaGestion.setVisible(true);
 								dispose();
 							} catch (Exception e1) {
 								JOptionPane.showMessageDialog(new JPanel(), e1.getMessage(), "Error",
 										JOptionPane.ERROR_MESSAGE);
-								// TODO Auto-generated catch block
-								// e1.printStackTrace();
 								throw e1;
 							}
 						}
 
 					} catch (Exception e2) {
-						// TODO Auto-generated catch block
 						JOptionPane.showMessageDialog(new JPanel(), e2.getMessage(), "Error",
 								JOptionPane.ERROR_MESSAGE);
 					}

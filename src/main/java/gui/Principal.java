@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
 import java.awt.SystemColor;
 
 @SuppressWarnings("serial")
@@ -21,6 +22,11 @@ public class Principal extends JFrame {
 		setResizable(false);
 		setTitle("Gestiones");
 		setLocationRelativeTo(null); 
+		//cargar localidades y provincias sql
+		//GestorProvincia gp = new GestorProvincia();
+		//GestorLocalidad gl = new GestorLocalidad();
+		//gp.cargarProvinciasBD();
+		//gl.cargarLocalidadesBD();
 		generarVentana();
 
 	}
@@ -62,15 +68,15 @@ public class Principal extends JFrame {
 		panelCentral.add(btnGestionarClientes);
 
 
-		final ListadoTareasGUI listadoTareas = new ListadoTareasGUI();
-		final AltaMecanicoGUI altaMecanico = new AltaMecanicoGUI();
-		final AltaClienteGUI altaCliente = new AltaClienteGUI();
-		// final GestionStockGUI gestionStock = new
+		
+	
+		
+		//final GestionStockGUI gestionStock = new
 		
 		btnGestionarTareas.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				final ListadoTareasGUI listadoTareas = new ListadoTareasGUI();
 				listadoTareas.setVisible(true);
 				dispose();
 			}
@@ -79,7 +85,7 @@ public class Principal extends JFrame {
 		btnGestionarStock.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				final ListadoTareasGUI listadoTareas = new ListadoTareasGUI();
 				listadoTareas.setVisible(true);
 				dispose();
 			}
@@ -88,46 +94,20 @@ public class Principal extends JFrame {
 		btnGestionarMecanicos.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				altaMecanico.setVisible(true);
-				//dispose();
+				final GestionMecanicosGUI gestMecanicos = new GestionMecanicosGUI();
+				gestMecanicos.setVisible(true);
+				dispose();
 			}
 		});
 		
 		btnGestionarClientes.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				final AltaClienteGUI altaCliente = new AltaClienteGUI();
 				altaCliente.setVisible(true);
-				dispose();
+				//dispose();
 			}
 		});
-//		//btnGestionarListado.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				JOptionPane.showMessageDialog(new JPanel(), "Modalidad a�n no implementada", " ",
-//						JOptionPane.INFORMATION_MESSAGE);
-//			}
-//		});
-//
-//		//btnGestionarHabitacion.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				final GestionarHabitacion ventanaGH = new GestionarHabitacion();
-//				 ventanaGH.setVisible(true);
-//				 dispose();
-//			}
-//		});
-//
-//		btnGestionarFactura.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				final GestionarFactura ventanaGF = new GestionarFactura();
-//				ventanaGF.setVisible(true);
-//				dispose();
-//				
-//			}
-//		});
 
 	}
 

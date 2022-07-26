@@ -12,7 +12,7 @@ public class Mecanico {
 	private Integer idMecanico;
 	
 	@OneToOne(optional = false)
-    @JoinColumn(name= "id_persona" , referencedColumnName = "idpersona")
+    @JoinColumn(name= "id_persona" , referencedColumnName = "idPersona")
     private Persona persona;
 	
 	@Column

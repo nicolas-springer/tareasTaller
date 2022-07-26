@@ -8,4 +8,6 @@ public interface PersonaDAO {
 
 	void guardarPersona(Persona persona);
 
+	Persona recuperarPersonaDNI(Integer dni);
+
 }

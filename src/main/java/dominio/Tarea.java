@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 import enumClasses.EstadoTarea;
 
-@Entity
+@Entity(name="tarea")
 @Table
 public class Tarea {
 	
@@ -15,12 +15,20 @@ public class Tarea {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer idTarea;
 	
-	@Column
+	@ManyToOne
+	@JoinColumn(name= "id_cliente" , referencedColumnName = "idCliente")
 	private Cliente cliente;
-	@Column 
+	
+	@ManyToOne
+	@JoinColumn(name= "id_auto" , referencedColumnName = "idAuto")
 	private Auto auto;
-	@Column
+	
+	@ManyToOne
+	@JoinColumn(name= "id_mecanico" , referencedColumnName = "idMecanico")
 	private Mecanico mecanico;
+	
+	
+	
 	@Column
 	private LocalDate fechaCreacion;
 	@Column

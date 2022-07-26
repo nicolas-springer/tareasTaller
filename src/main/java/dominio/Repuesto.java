@@ -2,7 +2,7 @@ package dominio;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name="repuesto")
 @Table
 public class Repuesto {
 

@@ -19,4 +19,9 @@ public class GestorProvincia {
 		return daoProvincias.obtenerIdDe(prov);
 	}
 
+	public void cargarProvinciasBD() {
+		daoProvincias.cargarProvinciasBD();
+		
+	}
+
 }

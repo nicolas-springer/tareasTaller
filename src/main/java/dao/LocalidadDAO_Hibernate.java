@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.Connection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -17,8 +18,9 @@ public class LocalidadDAO_Hibernate implements LocalidadDAO{
 	
 	@Override
 	public Localidad recuperarLocalidadNombre(String loc) {
-		// TODO Auto-generated method stub
-		return null;
+		manager = ConnectionBD.conectar();
+		Localidad l = manager.createQuery("select l from localidad l where nombre='"+loc+"'",Localidad.class).getSingleResult();
+		return l;
 	}
 
 	@Override
@@ -29,6 +31,20 @@ public class LocalidadDAO_Hibernate implements LocalidadDAO{
 		
 		return manager.
 				createQuery("SELECT l FROM localidad l Where id_provincia ='" + idProv + "'", Localidad.class).getResultList(); 
+	}
+
+	@Override
+	public void cargarLocalidadesBD() {
+		// chequear si existen las localidades sino cargarlas
+		
+	}
+
+	@Override
+	public Localidad recuperarLocalidadID(Integer id) {
+		manager = ConnectionBD.conectar();
+		Localidad l  =  manager.createQuery("select l from localidad l where id="+id,Localidad.class).getSingleResult();
+		manager.close();
+		return l;
 	}
 
 }

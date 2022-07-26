@@ -20,9 +20,8 @@ public class ProvinciaDAO_Hibernate implements ProvinciaDAO{
 	public List<Provincia> recuperarProvincias() {
 		
 		manager = ConnectionBD.conectar();
-		//return (List<Provincia>) manager
-
-return null;
+		return (List<Provincia>) manager.createQuery(
+						 "SELECT p FROM provincia p ", Provincia.class ).getResultList();
 	}
 
 	@Override
@@ -34,6 +33,12 @@ return null;
 
 
 		return idProvincia.get(0).getIdProvincia();
+	}
+	@Override
+	public void cargarProvinciasBD() {
+		// TODO Auto-generated method stub
+		//chequear que existan provincias cargas, sino cargarlas con txt de meta-inf
+		
 	}
 	
 	

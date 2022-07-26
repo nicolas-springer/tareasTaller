@@ -2,6 +2,7 @@ package dominio;
 
 import javax.persistence.*;
 
+import dto.ClienteDTO;
 import dto.MecanicoDTO;
 
 
@@ -12,14 +13,14 @@ public class Persona {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer idpersona;
+	private Integer idPersona;
 	@Column
 	private String apellido;
 	private String nombre;
 	private Integer numeroDocumento;
 	
 	@OneToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="direccion_id",referencedColumnName="id_direccion")
+	@JoinColumn(name="direccion_id",referencedColumnName="id_Direccion")
 	private Direccion direccion;
 	
 	private String cuit;
@@ -103,11 +104,11 @@ public class Persona {
 
 	
 	public Integer getIdpersona() {
-		return idpersona;
+		return idPersona;
 	}
 
 	public void setIdpersona(Integer idpersona) {
-		this.idpersona = idpersona;
+		this.idPersona = idpersona;
 	}
 
 	
@@ -125,6 +126,15 @@ public class Persona {
 		this.setNumeroDocumento(mecanicoDTO.getNumeroDocumento());
 		this.setDireccion(dir);
 		this.setTelefono(mecanicoDTO.getTelefono());
+		
+	}
+
+	public void inicializarPersona(ClienteDTO clienteDTO, Direccion dir) {
+		this.setApellido(clienteDTO.getApellido());
+		this.setNombre(clienteDTO.getNombre());
+		this.setNumeroDocumento(clienteDTO.getNumeroDocumento());
+		this.setDireccion(dir);
+		this.setTelefono(clienteDTO.getTelefono());
 		
 	}
 	

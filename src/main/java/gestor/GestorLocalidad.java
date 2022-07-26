@@ -20,4 +20,15 @@ public class GestorLocalidad {
 		return daoLocalidad.obtenerLocalidadesDeProvincia(prov);
 	}
 
+
+	public void cargarLocalidadesBD() {
+		daoLocalidad.cargarLocalidadesBD();
+		
+	}
+
+
+	public Localidad recuperarLocalidadID(Integer id) {
+			return daoLocalidad.recuperarLocalidadID(id);
+	}
+
 }

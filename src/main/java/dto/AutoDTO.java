@@ -2,10 +2,15 @@ package dto;
 
 public class AutoDTO {
 	private String patente;
-	
-	
 	private String modelo;
 	private String marca;	
+	private String dnicliente;
+	public String getDnicliente() {
+		return dnicliente;
+	}
+	public void setDnicliente(String dnicliente) {
+		this.dnicliente = dnicliente;
+	}
 	public String getPatente() {
 		return patente;
 	}

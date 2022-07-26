@@ -38,4 +38,13 @@ public class PersonaDAO_Hibernate implements PersonaDAO {
 		
 	}
 
+	@Override
+	public Persona recuperarPersonaDNI(Integer dni) {
+		manager = ConnectionBD.conectar();
+		List<Persona> p =  manager
+				.createQuery("SELECT p FROM persona p WHERE numeroDocumento = '"+dni+"' ",Persona.class).getResultList();
+		if(p.size() == 0) return null;
+		else return p.get(0);
+		
+	}
 }

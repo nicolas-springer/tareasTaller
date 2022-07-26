@@ -2,7 +2,7 @@ package dominio;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name="itemtarea")
 @Table
 public class ItemTarea {
 

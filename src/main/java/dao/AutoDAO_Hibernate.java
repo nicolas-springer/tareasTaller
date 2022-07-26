@@ -16,7 +16,7 @@ public class AutoDAO_Hibernate implements AutoDAO{
 		manager = ConnectionBD.conectar();
 		 
 		 return manager
-				.createQuery("SELECT c FROM consumo c WHERE id_estadia ='"+idAuto+"'",Auto.class).getResultList();
+				.createQuery("SELECT a from auto where idauto ='"+idAuto+"'",Auto.class).getResultList();
 	}
 
 	@Override
@@ -36,6 +36,25 @@ public class AutoDAO_Hibernate implements AutoDAO{
 			manager.close();
 			}
 		
+	}
+
+	@Override
+	public List<Auto> recuperarAutosDeClienteID(int id) {
+		manager = ConnectionBD.conectar();
+		 
+		 return manager
+				.createQuery("SELECT a from auto a where id_cliente ='"+id+"'",Auto.class).getResultList();
+	
+	}
+
+	@Override
+	public Auto recuperarAutoConPatente(String pat) {
+		manager = ConnectionBD.conectar();
+		 
+		 Auto a = manager
+				.createQuery("SELECT a from auto a where patente ='"+pat+"'",Auto.class).getSingleResult();
+		 manager.close();
+		 return a;
 	}
 
 

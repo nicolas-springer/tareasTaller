@@ -1,5 +1,7 @@
 package dao;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 import dominio.Mecanico;
@@ -32,6 +34,24 @@ public class MecanicoDAO_Hibernate implements MecanicoDAO{
 			}
 		
 	}
+
+	@Override
+	public List<Mecanico> recuperarMecanicos() {
+
+		manager = ConnectionBD.conectar();
+		List<Mecanico> r = manager.createQuery("select m from mecanico m", Mecanico.class).getResultList();
+		manager.close();
+		return r;
+	}
+
+	@Override
+	public Mecanico recuperarMecanicoID(Integer idpersona) {
+		manager = ConnectionBD.conectar();
+		Mecanico r = manager.createQuery("select m from mecanico m where id_persona='"+idpersona+"'", Mecanico.class).getSingleResult();
+		manager.close();
+		return r;
+	}
+
 
 
 

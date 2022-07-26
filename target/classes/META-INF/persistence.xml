@@ -22,16 +22,16 @@
  	            
         <properties>
             <property name="javax.persistence.jdbc.driver"
-                value="org.postgresql.Driver" />
+                value="org.postgresql.Driver" /><!-- DB Driver -->
             <property name="javax.persistence.jdbc.url"
-                value="jdbc:postgresql://localhost/postgres" />
+                value="jdbc:postgresql://localhost:5432/dbproytaller" /><!-- BD name -->
             <property name="javax.persistence.jdbc.user"
                 value="postgres" />
             <property name="javax.persistence.jdbc.password" value="1234" />
 
             <property name="hibernate.dialect"
-                value="org.hibernate.dialect.PostgreSQLDialect" />
-            <property name="hibernate.hbm2ddl.auto" value="update" />
+                value="org.hibernate.dialect.PostgreSQLDialect" /><!-- DB Dialect -->
+            <property name="hibernate.hbm2ddl.auto" value="update" /><!-- create / create-drop / update -->
             
             <property name="hibernate.jdbc.use_get_generated_keys"
                 value="true" />

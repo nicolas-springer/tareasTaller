@@ -2,6 +2,7 @@ package app;
 
 import java.awt.EventQueue;
 
+import gui.MenuPrincipal;
 import gui.Principal;
 import util.ConnectionBD;
 
@@ -12,8 +13,13 @@ public class App {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {	
-					Principal frame = new Principal();
-					frame.setVisible(true);
+					//chequear provincias y localidades cargadas
+					
+					//Principal frame = new Principal();
+					//frame.setVisible(true);
+					//30598741
+					MenuPrincipal menuP = new MenuPrincipal();
+					menuP.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -22,8 +28,6 @@ public class App {
 	}
 	
 	/*public static void main(String[] args) {
-		
-
 		ConnectionBD bd = new ConnectionBD();
 		System.out.println(ConnectionBD.conectar());
 	}*/
