@@ -92,7 +92,7 @@ public class ListadoTareasGUI extends JFrame {
 						t.getCliente().getIdCliente().toString(),
 						t.getAuto().getIdAuto().toString(),
 						t.getMecanico().getPersona().getNumeroDocumento().toString(),
-						t.getFechaEntrega().toString()});
+						t.getFechaEntrega().getDayOfMonth()+"/"+t.getFechaEntrega().getMonthValue()+"/"+t.getFechaEntrega().getYear()});
 			}
 		}
 		else {
@@ -191,9 +191,11 @@ public class ListadoTareasGUI extends JFrame {
 		lblNewLabel_5.setBounds(20, 155, 161, 23);
 		panelDerecho.add(lblNewLabel_5);
 		
-		JTextArea txtrTest = new JTextArea();
-		txtrTest.setBounds(20, 189, 437, 133);
-		panelDerecho.add(txtrTest);
+		JTextArea textDescripcion = new JTextArea();
+		textDescripcion.setEditable(false);
+		textDescripcion.setWrapStyleWord(true);
+		textDescripcion.setBounds(20, 189, 437, 133);
+		panelDerecho.add(textDescripcion);
 		
 		JLabel lblAuto = new JLabel("");
 		lblAuto.setBounds(89, 107, 92, 14);
@@ -280,12 +282,24 @@ public class ListadoTareasGUI extends JFrame {
 		});
 		
 		
-		/*tableTareas.addMouseListener(new MouseAdapter() {
+		tableTareas.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int select = tableTareas.rowAtPoint(e.getPoint());
+				Integer idtar = Integer.parseInt(tableTareas.getValueAt(select, 0).toString());
+				System.out.println("select : " + select);
+				for(Tarea t :listaTareas) {
+					if(t.getIdTarea() == idtar) {
+						lblCliente.setText(t.getCliente().getPersona().getNombre()+" "+ t.getCliente().getPersona().getApellido());
+						lblMecanico.setText(t.getMecanico().getPersona().getNombre()+" "+ t.getMecanico().getPersona().getApellido());
+						textDescripcion.setText(t.getDescProblema().toString());
+					}
+				}
+				lblCliente.repaint();
+				lblMecanico.repaint();
+				textDescripcion.repaint();
 			}
-		});*/
+		});
 		
 	}
 }

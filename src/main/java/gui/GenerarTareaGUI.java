@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -37,7 +38,9 @@ import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import com.toedter.calendar.JDateChooser;
 
 public class GenerarTareaGUI extends JFrame {
 
@@ -124,13 +127,13 @@ public class GenerarTareaGUI extends JFrame {
 		
 		JLabel lblNewLabel_3 = new JLabel("Descripcion para la tarea:");
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblNewLabel_3.setBounds(10, 290, 169, 20);
+		lblNewLabel_3.setBounds(10, 354, 169, 20);
 		contentPane.add(lblNewLabel_3);
 		
 		JTextPane textPaneDescripcion = new JTextPane();
 		textPaneDescripcion.setBorder(new LineBorder(Color.GRAY));
 		textPaneDescripcion.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		textPaneDescripcion.setBounds(10, 321, 453, 114);
+		textPaneDescripcion.setBounds(10, 385, 453, 50);
 		contentPane.add(textPaneDescripcion);
 		
 		JButton btnAgregarAuto = new JButton("Agregar Auto");
@@ -146,6 +149,16 @@ public class GenerarTareaGUI extends JFrame {
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblNewLabel_4.setBounds(75, 62, 388, 14);
 		contentPane.add(lblNewLabel_4);
+		
+		JLabel lblNewLabel_5 = new JLabel("Fecha entrega:");
+		lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblNewLabel_5.setBounds(10, 304, 101, 20);
+		contentPane.add(lblNewLabel_5);
+		
+		JDateChooser dateChooser = new JDateChooser();
+		dateChooser.setDateFormatString("dd-MM-yyyy");
+		dateChooser.setBounds(121, 304, 200, 20);
+		contentPane.add(dateChooser);
 		
 		
 		btnVerificarDNI.addActionListener(new ActionListener() {
@@ -223,18 +236,30 @@ public class GenerarTareaGUI extends JFrame {
 						
 						GestorTarea gTarea = new GestorTarea();
 						
-						DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-						LocalDate fe = LocalDate.parse("12/12/2050", dtf);
+						Date dcdate = dateChooser.getDate();
+						
+						String descripcionProblema = textPaneDescripcion.getText().toString();
 						
 						
-						try {
-							gTarea.generarTarea(clienteAux, autoTarea, mecanicoAsignado, textPaneDescripcion.getText().toString(), fe);
-							JOptionPane.showMessageDialog(null, "Datos cargados correctamente");
-							dispose();
-						} catch (Exception e2) {
-							JOptionPane.showMessageDialog(new JPanel(), e2.getMessage(), "Error",
-									JOptionPane.ERROR_MESSAGE);
-							throw e2;
+						
+						boolean hayvacios = verificarvacios(clienteAux,autoTarea,mecanicoAsignado,descripcionProblema,dcdate);
+						
+						if(!hayvacios) {
+							
+							try {
+								
+								LocalDate fe = dcdate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();;
+								DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+								fe.format(dtf);
+								
+								gTarea.generarTarea(clienteAux, autoTarea, mecanicoAsignado, descripcionProblema, fe);
+								JOptionPane.showMessageDialog(null, "Datos cargados correctamente");
+								dispose();
+							} catch (Exception e2) {
+								JOptionPane.showMessageDialog(new JPanel(), e2.getMessage(), "Error",
+										JOptionPane.ERROR_MESSAGE);
+								throw e2;
+							}
 						}
 					}
 					else{
@@ -254,5 +279,37 @@ public class GenerarTareaGUI extends JFrame {
 		});
 		
 		
+	}
+
+	protected boolean verificarvacios(Cliente clienteAux2, Auto autoTarea2, Mecanico mecanicoAsignado2,
+			String descripcionProblema, Date dcdate) {
+		// TODO Auto-generated method stub
+		String mensajeerror="";
+		boolean flag=false;
+		if(clienteAux2==null) {
+			mensajeerror+="Ingrese el DNI del cliente";
+			flag=true;
+		}
+		if(autoTarea2==null) {
+			mensajeerror+="Seleccione un auto.";
+			flag=true;
+		}
+		if(mecanicoAsignado2==null) {
+			mensajeerror+="Seleccione un mecanico.";
+			flag=true;
+		}
+		if(dcdate==null) {
+			mensajeerror+="Seleccione una fecha de entrega.";
+			flag=true;
+		}
+
+		if(flag) {
+			JOptionPane.showMessageDialog(null, 
+                mensajeerror, 
+                "CUIDADO", 
+                JOptionPane.WARNING_MESSAGE);
+			}
+		
+		return flag;
 	}
 }

@@ -17,7 +17,8 @@ public class App {
 					
 					//Principal frame = new Principal();
 					//frame.setVisible(true);
-					//30598741
+					//dni test: 30598741
+					
 					MenuPrincipal menuP = new MenuPrincipal();
 					menuP.setVisible(true);
 				} catch (Exception e) {

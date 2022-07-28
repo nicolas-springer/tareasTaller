@@ -28,7 +28,7 @@ public class ListadoAnotacionesGUI extends JFrame {
 	private JTable table;
 
 	public ListadoAnotacionesGUI() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(200, 100, 500, 700);
 		setTitle("Anotaciones");
 		contentPane = new JPanel();

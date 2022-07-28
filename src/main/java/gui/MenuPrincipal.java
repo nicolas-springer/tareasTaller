@@ -99,19 +99,20 @@ public class MenuPrincipal extends JFrame {
 		contentPane.add(lblNewLabel_1_1_2);
 		
 		JButton btnListadoTarea = new JButton("Listado de tareas");
-		btnListadoTarea.setBounds(394, 94, 180, 23);
+		btnListadoTarea.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnListadoTarea.setBounds(361, 94, 220, 40);
 		contentPane.add(btnListadoTarea);
 		
 		JButton btnAgregarTarea = new JButton("Agregar tarea");
-		btnAgregarTarea.setBounds(394, 145, 180, 23);
+		btnAgregarTarea.setBounds(361, 156, 220, 40);
 		contentPane.add(btnAgregarTarea);
 		
 		JButton btnListadoDeClientes = new JButton("Listado de clientes");
-		btnListadoDeClientes.setBounds(699, 94, 180, 23);
+		btnListadoDeClientes.setBounds(699, 94, 220, 40);
 		contentPane.add(btnListadoDeClientes);
 		
 		JButton btnCargarNuevoCliente = new JButton("Cargar nuevo cliente");
-		btnCargarNuevoCliente.setBounds(699, 145, 180, 23);
+		btnCargarNuevoCliente.setBounds(699, 156, 220, 40);
 		contentPane.add(btnCargarNuevoCliente);
 		
 		JButton btnCargarNuevoMecanico = new JButton("Cargar nuevo mecanico");
@@ -135,12 +136,6 @@ public class MenuPrincipal extends JFrame {
 		lblNewLabel_3.setBounds(959, 349, 125, 31);
 		contentPane.add(lblNewLabel_3);
 		
-		JTextPane textPaneNotas = new JTextPane();
-		textPaneNotas.setBorder(new LineBorder(Color.GRAY));
-		textPaneNotas.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textPaneNotas.setBounds(961, 379, 293, 240);
-		contentPane.add(textPaneNotas);
-		
 		JButton btnGuardarNota = new JButton("Guardar Nota");
 		btnGuardarNota.setBounds(1142, 627, 112, 23);
 		contentPane.add(btnGuardarNota);
@@ -148,6 +143,13 @@ public class MenuPrincipal extends JFrame {
 		JButton btnVerNotas = new JButton("Ver Notas");
 		btnVerNotas.setBounds(961, 627, 112, 23);
 		contentPane.add(btnVerNotas);
+		
+		JTextArea textArea = new JTextArea();
+		textArea.setWrapStyleWord(true);
+		textArea.setLineWrap(true);
+		textArea.setBorder(new LineBorder(Color.GRAY));
+		textArea.setBounds(961, 391, 293, 225);
+		contentPane.add(textArea);
 		
 		
 	
@@ -209,7 +211,7 @@ public class MenuPrincipal extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				GestorAnotacion gAnotacion = new GestorAnotacion();
-				gAnotacion.darAltaNota(textPaneNotas.getText());
+				gAnotacion.darAltaNota(textArea.getText());
 			}
 		});
 		btnVerNotas.addActionListener(new ActionListener() {
@@ -217,6 +219,7 @@ public class MenuPrincipal extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				//ventana de notas
 				final ListadoAnotacionesGUI la = new ListadoAnotacionesGUI();
+				la.setLocationRelativeTo(null);
 				la.setVisible(true);
 			}
 		});
