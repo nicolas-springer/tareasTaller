@@ -19,5 +19,10 @@ public class GestorAnotacion {
 	public List<Anotacion> recuperarAnotaciones(){
 		return daoAnotacion.recuperarAnotaciones();
 	}
+
+	public List<Anotacion> recuperarAnotacionesPalabraClave(String palabra) {
+		// TODO Auto-generated method stub
+		return daoAnotacion.recuperarAnotacionesPalabraClave(palabra);
+	}
 	
 }

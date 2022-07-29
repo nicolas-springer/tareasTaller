@@ -10,10 +10,13 @@ import javax.swing.table.DefaultTableModel;
 
 import dominio.Anotacion;
 import gestor.GestorAnotacion;
+import util.RenderListadoAnotaciones;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -21,12 +24,16 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JTextField;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ListadoAnotacionesGUI extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
-
+	private JTextField textFieldBusqueda;
+	List<Anotacion> lista;
 	public ListadoAnotacionesGUI() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(200, 100, 500, 700);
@@ -36,8 +43,12 @@ public class ListadoAnotacionesGUI extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(92, 11, 133, 22);
+		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox.setBounds(92, 11, 151, 22);
+		comboBox.addItem("Palabra clave");
+		comboBox.addItem("Entre fechas");
+		comboBox.setSelectedIndex(0);
+		
 		contentPane.add(comboBox);
 		
 		JLabel lblNewLabel = new JLabel("Filtro");
@@ -46,7 +57,7 @@ public class ListadoAnotacionesGUI extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 96, 464, 502);
+		scrollPane.setBounds(10, 136, 464, 462);
 		contentPane.add(scrollPane);
 		
 		DefaultTableModel model = new DefaultTableModel();
@@ -54,18 +65,26 @@ public class ListadoAnotacionesGUI extends JFrame {
 		model.addColumn("Fecha");
 		
 		GestorAnotacion gAnotacion = new GestorAnotacion();
-		List<Anotacion> lista = gAnotacion.recuperarAnotaciones();
+		lista = gAnotacion.recuperarAnotaciones();
+		
 		for(Anotacion a: lista) {
-			model.addRow(new Object[] {a.getContenido().toString(),a.getFechaCreacion().toString()});
+			JTextArea tx = new JTextArea(a.getContenido().toString());
+			tx.setFont(new Font("Tahoma", Font.BOLD, 13));
+			model.addRow(new Object[] {tx,a.getFechaCreacion().toString()});
 		}
 		
 		
 		table = new JTable(model);
+		
+		table.setDefaultRenderer(Object.class, new RenderListadoAnotaciones());
+		
 		table.setDefaultEditor(Object.class, null);
 		table.getColumnModel().getColumn(0).setPreferredWidth(350);//contenido
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);//fecha
-		table.setRowHeight(60);
+		table.setRowHeight(70);
 		table.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		
+		
 		scrollPane.setViewportView(table);
 		
 		JLabel label = new JLabel("New label");
@@ -73,7 +92,7 @@ public class ListadoAnotacionesGUI extends JFrame {
 		
 		JLabel lblNewLabel_1 = new JLabel("Anotaciones:");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_1.setBounds(10, 67, 108, 14);
+		lblNewLabel_1.setBounds(10, 111, 108, 14);
 		contentPane.add(lblNewLabel_1);
 		
 		JButton btnAgregarNota = new JButton("Agregar Nota");
@@ -84,15 +103,65 @@ public class ListadoAnotacionesGUI extends JFrame {
 		btnVolver.setBounds(10, 627, 89, 23);
 		contentPane.add(btnVolver);
 		
+		JLabel lblPalabreClave = new JLabel("Palabra Clave:");
+		lblPalabreClave.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblPalabreClave.setBounds(10, 54, 108, 14);
+		contentPane.add(lblPalabreClave);
 		
-		btnVolver.addActionListener(new ActionListener() {
+		textFieldBusqueda = new JTextField();
+		textFieldBusqueda.setBounds(102, 52, 141, 20);
+		contentPane.add(textFieldBusqueda);
+		textFieldBusqueda.setColumns(10);
+		
+		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.setBounds(253, 51, 89, 23);
+		contentPane.add(btnBuscar);
+		
+		btnBuscar.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+				if(comboBox.getSelectedIndex() == 0) {
+					//palabra clave
+					String palabra= textFieldBusqueda.getText().toString();
+					if(palabra.length()==0) {
+						JOptionPane.showMessageDialog(null, 
+				                "Escriba una palabra clave.", 
+				                "CUIDADO", 
+				                JOptionPane.WARNING_MESSAGE);
+					}
+					else {
+						lista = gAnotacion.recuperarAnotacionesPalabraClave(palabra);
+						if(lista.size()!=0) {
+							System.out.println("lista no nula");
+							model.getDataVector().removeAllElements();
+							model.fireTableDataChanged();
+							
+							for(Anotacion a: lista) {
+								JTextArea tx = new JTextArea(a.getContenido().toString());
+								tx.setFont(new Font("Tahoma", Font.BOLD, 13));
+								model.addRow(new Object[] {tx,a.getFechaCreacion().toString()});
+							}
+							table.repaint();
+						}
+						else {
+							JOptionPane.showMessageDialog(null, 
+					                "No se encontraron anotaciones con la palabra clave: "+palabra.toUpperCase(), 
+					                "CUIDADO", 
+					                JOptionPane.WARNING_MESSAGE);
+						}
+					}
+					
+				}
+				else {
+					
+				}
 				
 			}
 		});
-	}
+		
 
+		
+		
+	}
 }

@@ -9,4 +9,5 @@ public interface AnotacionDAO {
 	List<Anotacion> recuperarAnotaciones();
 	List<Anotacion> recuperarAnotacionesFecha(LocalDate fecha);
 	List<Anotacion> recuperarAnotacionesEntreFechas(LocalDate primera, LocalDate segunda);
+	List<Anotacion> recuperarAnotacionesPalabraClave(String palabra);
 }

@@ -56,4 +56,13 @@ public class AnotacionDAO_Hibernate implements AnotacionDAO {
 		return null;
 	}
 
+	@Override
+	public List<Anotacion> recuperarAnotacionesPalabraClave(String palabra) {
+		//String patron = '%'+palabra+'%';
+		manager = ConnectionBD.conectar();
+		List<Anotacion> lista = manager.createQuery("select a from anotacion a where contenido like '%"+palabra+"%'",Anotacion.class).getResultList();
+		manager.close();
+		return lista;
+	}
+
 }

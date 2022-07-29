@@ -42,9 +42,13 @@ public class LocalidadDAO_Hibernate implements LocalidadDAO{
 	@Override
 	public Localidad recuperarLocalidadID(Integer id) {
 		manager = ConnectionBD.conectar();
-		Localidad l  =  manager.createQuery("select l from localidad l where id="+id,Localidad.class).getSingleResult();
+		List<Localidad> l  =  manager.createQuery("select l from localidad l where id="+id,Localidad.class).getResultList();
 		manager.close();
-		return l;
+		
+		if(l.size()==0) {
+			return null;
+		}
+		return l.get(0);
 	}
 
 }
