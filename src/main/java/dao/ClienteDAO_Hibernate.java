@@ -57,7 +57,9 @@ public class ClienteDAO_Hibernate implements ClienteDAO {
 		manager = ConnectionBD.conectar();
 		List<Cliente> lista = manager.createQuery("select c from cliente c where id_persona ='"+idpersona+"'", Cliente.class).getResultList();
 		manager.close();
-		return lista.get(0);
+		
+		if(lista.size()==0)return null;
+		else return lista.get(0);
 	}
 
 }

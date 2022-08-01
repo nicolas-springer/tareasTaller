@@ -16,6 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -161,18 +162,71 @@ public class GenerarTareaGUI extends JFrame {
 		contentPane.add(dateChooser);
 		
 		
+		
+		
 		btnVerificarDNI.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//boolean existe = gCliente.verificarDNI(textFieldDNI.getText());
-				clienteAux = gCliente.recuperarClienteDNI(textFieldDNI.getText());
-				//System.out.println("id: "+clienteAux.getIdCliente().toString());
-				if(clienteAux!=null) {
-					btnAgregarAuto.setEnabled(true);
-					lblNewLabel_4.setText(clienteAux.getPersona().getNombre()+" "+ clienteAux.getPersona().getApellido());
-					List<Auto> listaAutos = gCliente.recuperarAutosClienteDNI(textFieldDNI.getText());	
-					if(!(listaAutos.size()==0)) {				
+				
+				if(validarformatoDNI(textFieldDNI.getText().toString())) {
+					clienteAux = gCliente.recuperarClienteDNI(textFieldDNI.getText().toString());
+					if(clienteAux!=null) {
+						btnAgregarAuto.setEnabled(true);
+						lblNewLabel_4.setText(clienteAux.getPersona().getNombre()+" "+ clienteAux.getPersona().getApellido());
+						List<Auto> listaAutos = gCliente.recuperarAutosClienteDNI(textFieldDNI.getText());	
+						if(!(listaAutos.size()==0)) {				
+							model.getDataVector().removeAllElements();
+							model.fireTableDataChanged();
+							for(Auto a : listaAutos) {
+								System.out.println("id auto: "+a.getIdAuto());
+								model.addRow(new Object[] {
+										a.getPatente().toString(),
+										a.getMarca().toString(),
+										a.getModelo().toString()
+								});
+							}
+						}
+						else {
+							
+							model.addRow(new Object[] {
+								"no tiene autos registrado","",""	
+							});
+						}
+					}
+					else {
+						btnAgregarAuto.setEnabled(false);
+						JOptionPane.showMessageDialog(null, 
+	                            "No existe un cliente con este DNI", 
+	                            "CUIDADO", 
+	                            JOptionPane.WARNING_MESSAGE);
+						}
+					tableAutos.repaint();
+				}
+				else {
+					JOptionPane.showMessageDialog(null, 
+                            "Ingrese un numero de DNI", 
+                            "CUIDADO", 
+                            JOptionPane.WARNING_MESSAGE);
+				}
+			}
+			
+		});
+		
+
+		btnAgregarAuto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+			if(btnAgregarAuto.isEnabled()) { 
+				CargarAutoGUI carga = new CargarAutoGUI(clienteAux);
+				try {
+					carga.setVisible(true);
+				} catch (Exception e2) {
+					// TODO: handle exception
+				} finally {
+					if(!carga.isActive()) {				
 						model.getDataVector().removeAllElements();
 						model.fireTableDataChanged();
+						List<Auto> listaAutos = gCliente.recuperarAutosClienteDNI(textFieldDNI.getText());	
+						
 						for(Auto a : listaAutos) {
 							System.out.println("id auto: "+a.getIdAuto());
 							model.addRow(new Object[] {
@@ -182,32 +236,9 @@ public class GenerarTareaGUI extends JFrame {
 							});
 						}
 					}
-					else {
-						
-						model.addRow(new Object[] {
-							"no tiene autos registrado","",""	
-						});
-					}
 				}
-				else {
-					btnAgregarAuto.setEnabled(false);
-					JOptionPane.showMessageDialog(null, 
-                            "No existe un cliente con este DNI", 
-                            "CUIDADO", 
-                            JOptionPane.WARNING_MESSAGE);
-					}
-				tableAutos.repaint();
-			}
-	
-		});
-		
-
-		btnAgregarAuto.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			
-			if(btnAgregarAuto.isEnabled()) { 
-				CargarAutoGUI carga = new CargarAutoGUI(clienteAux);
-				carga.setVisible(true);
+				
+				
 				}
 			}
 		});
@@ -227,11 +258,9 @@ public class GenerarTareaGUI extends JFrame {
 					if(filaAutoTabla!=null) {
 						GestorAuto gAuto = new GestorAuto();
 						String pat = tableAutos.getValueAt(filaAutoTabla, 0).toString();
-						System.out.println(pat);
 						autoTarea = gAuto.recuperarAutoConPatente(pat);
 						GestorMecanico gMecanico = new GestorMecanico();
 						String dniAsignado= comboBox.getSelectedItem().toString().replaceAll("[^0-9]", "");
-						System.out.println(dniAsignado);
 						
 						mecanicoAsignado=gMecanico.recuperarMecanicoDNI(dniAsignado);
 						
@@ -285,6 +314,15 @@ public class GenerarTareaGUI extends JFrame {
 		
 	}
 
+	protected boolean validarformatoDNI(String dni) {
+		
+		String expDNI = "[1-9][0-9]+";
+		Pattern formatoDNI = Pattern.compile(expDNI);
+		
+		return formatoDNI.matcher(dni).matches();
+		
+	}
+	
 	protected boolean verificarvacios(Cliente clienteAux2, Auto autoTarea2, Mecanico mecanicoAsignado2,
 			String descripcionProblema, Date dcdate) {
 		// TODO Auto-generated method stub

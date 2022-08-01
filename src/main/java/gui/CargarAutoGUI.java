@@ -39,7 +39,7 @@ public class CargarAutoGUI extends JFrame {
 	public CargarAutoGUI(Cliente clienteAux) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 320);
-		setTitle("Generar Tarea");
+		setTitle("Asignar vehiculo");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -121,7 +121,7 @@ public class CargarAutoGUI extends JFrame {
 
 					try {
 
-						Boolean validarDatosAuto = gAuto.validarDatos(textPatente,textModelo);
+						Boolean validarDatosAuto = gAuto.validarDatos(textModelo,textPatente);
 						if (validarDatosAuto) {
 							AutoDTO autodto = new AutoDTO();
 							autodto.setMarca(comboBox.getSelectedItem().toString());
@@ -137,6 +137,7 @@ public class CargarAutoGUI extends JFrame {
 										JOptionPane.ERROR_MESSAGE);
 								throw e1;
 							}
+					
 						}
 
 					} catch (Exception e2) {

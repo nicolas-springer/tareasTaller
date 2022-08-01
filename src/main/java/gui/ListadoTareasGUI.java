@@ -25,6 +25,8 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
@@ -34,14 +36,20 @@ import java.awt.SystemColor;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
 import javax.swing.border.LineBorder;
+import com.toedter.calendar.JDateChooser;
 
 public class ListadoTareasGUI extends JFrame {
 	
 	private JPanel contentPane;
 	private JTable tableRespuestoUsados;
 	private JTable tableTareas;
-	private JTextField textField;
+	private JTextField textFieldBusqueda;
 	List<Tarea> listaTareas;
 	DefaultTableModel model = new DefaultTableModel();
 	
@@ -97,12 +105,17 @@ public class ListadoTareasGUI extends JFrame {
 		if(!(listaTareas.size()==0)) {
 			for(Tarea t : listaTareas) {
 				
-				model.addRow(new Object[] {t.getIdTarea().toString(),
+				/*model.addRow(new Object[] {t.getIdTarea().toString(),
 						t.getCliente().getIdCliente().toString(),
 						t.getAuto().getIdAuto().toString(),
 						t.getMecanico().getPersona().getNumeroDocumento().toString(),
-						t.getFechaEntrega().getDayOfMonth()+"/"+t.getFechaEntrega().getMonthValue()+"/"+t.getFechaEntrega().getYear()});
-				
+						t.getFechaEntrega().getDayOfMonth()+"/"+t.getFechaEntrega().getMonthValue()+"/"+t.getFechaEntrega().getYear()});*/
+				model.addRow(new Object[] {t.getIdTarea().toString(),
+						t.getCliente().getPersona().getNombre()+" "+t.getCliente().getPersona().getApellido(),
+						t.getAuto().getMarca()+" "+t.getAuto().getModelo(),
+						t.getMecanico().getPersona().getNombre()+" "+t.getMecanico().getPersona().getApellido(),
+						t.getFechaEntrega().getDayOfMonth()+"/"+t.getFechaEntrega().getMonthValue()+"/"+t.getFechaEntrega().getYear()
+						});
 			}
 		}
 		else {
@@ -115,6 +128,14 @@ public class ListadoTareasGUI extends JFrame {
 		
 		tableTareas = new JTable(model);
 		tableTareas.setDefaultEditor(Object.class, null);
+		tableTareas.getColumnModel().getColumn(0).setPreferredWidth(15);//idtarea
+		tableTareas.getColumnModel().getColumn(1).setPreferredWidth(80);//cliente
+		tableTareas.getColumnModel().getColumn(2).setPreferredWidth(70);//auto
+		tableTareas.getColumnModel().getColumn(3).setPreferredWidth(80);//mecanico
+		//tableTareas.getColumnModel().getColumn(4).setPreferredWidth(120);//fechaentrega
+		tableTareas.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);//fechaentrega
+		
+		
 		scrollPane.setViewportView(tableTareas);
 		
 		JButton btnVolver = new JButton("Volver");
@@ -143,21 +164,19 @@ public class ListadoTareasGUI extends JFrame {
 		lblNewLabel_9.setBounds(10, 36, 65, 14);
 		panelIzquierdaArriba.add(lblNewLabel_9);
 		
-		JComboBox comboBoxFiltros = new JComboBox();
+		JComboBox<String> comboBoxFiltros = new JComboBox<String>();
 		comboBoxFiltros.setBounds(85, 32, 120, 22);
 		panelIzquierdaArriba.add(comboBoxFiltros);
+
+		comboBoxFiltros.addItem("Cliente");
+		comboBoxFiltros.addItem("Mecanico");
+		comboBoxFiltros.addItem("Entre fechas");
 		
-		JLabel lblNewLabel_10 = new JLabel("Busqueda:");
-		lblNewLabel_10.setBounds(10, 68, 76, 14);
-		panelIzquierdaArriba.add(lblNewLabel_10);
 		
-		textField = new JTextField();
-		textField.setBounds(85, 65, 161, 20);
-		panelIzquierdaArriba.add(textField);
-		textField.setColumns(10);
+		
 		
 		JButton btnBuscar = new JButton("Buscar");
-		btnBuscar.setBounds(286, 64, 89, 23);
+		btnBuscar.setBounds(320, 64, 89, 23);
 		panelIzquierdaArriba.add(btnBuscar);
 		
 		JButton btnAgregarTarea = new JButton("AGREGAR TAREA");
@@ -181,6 +200,46 @@ public class ListadoTareasGUI extends JFrame {
 		JButton btnCanceladas = new JButton("Canceladas");
 		btnCanceladas.setBounds(372, 165, 106, 23);
 		panelIzquierdaArriba.add(btnCanceladas);
+		
+		JPanel panelBusquedaPalabra = new JPanel();
+		panelBusquedaPalabra.setBounds(10, 61, 297, 77);
+		panelIzquierdaArriba.add(panelBusquedaPalabra);
+		panelBusquedaPalabra.setLayout(null);
+		
+		panelBusquedaPalabra.setVisible(true);
+		
+		JLabel lblNewLabel_10 = new JLabel("Busqueda:");
+		lblNewLabel_10.setBounds(10, 32, 76, 14);
+		panelBusquedaPalabra.add(lblNewLabel_10);
+		
+		textFieldBusqueda = new JTextField();
+		textFieldBusqueda.setBounds(74, 29, 161, 20);
+		panelBusquedaPalabra.add(textFieldBusqueda);
+		textFieldBusqueda.setColumns(10);
+		
+		JPanel panelBusquedaFechas = new JPanel();
+		panelBusquedaFechas.setLayout(null);
+		panelBusquedaFechas.setBounds(10, 61, 297, 77);
+		panelIzquierdaArriba.add(panelBusquedaFechas);
+		panelBusquedaFechas.setVisible(false);
+		
+		JDateChooser dateChooserDesde = new JDateChooser();
+		dateChooserDesde.setBounds(115, 11, 138, 20);
+		panelBusquedaFechas.add(dateChooserDesde);
+		
+		JDateChooser dateChooserHasta = new JDateChooser();
+		dateChooserHasta.setBounds(115, 42, 138, 20);
+		panelBusquedaFechas.add(dateChooserHasta);
+		
+		JLabel lblNewLabel_3 = new JLabel("Desde");
+		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblNewLabel_3.setBounds(10, 11, 59, 20);
+		panelBusquedaFechas.add(lblNewLabel_3);
+		
+		JLabel lblNewLabel_3_1 = new JLabel("Hasta");
+		lblNewLabel_3_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblNewLabel_3_1.setBounds(10, 42, 59, 20);
+		panelBusquedaFechas.add(lblNewLabel_3_1);
 
 		
 		
@@ -193,31 +252,32 @@ public class ListadoTareasGUI extends JFrame {
 		panelDerecho.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Cliente:");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblNewLabel.setBounds(20, 107, 76, 23);
 		panelDerecho.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Mecanico:");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblNewLabel_1.setBounds(20, 147, 76, 23);
 		panelDerecho.add(lblNewLabel_1);
 		
 		JLabel lblCliente = new JLabel("");
-		lblCliente.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblCliente.setBounds(86, 107, 189, 23);
+		lblCliente.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblCliente.setBounds(86, 107, 228, 23);
 		panelDerecho.add(lblCliente);
 		
 		JLabel lblNewLabel_4 = new JLabel("Auto:");
-		lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblNewLabel_4.setBounds(20, 187, 76, 23);
 		panelDerecho.add(lblNewLabel_4);
 		
 		JLabel lblNewLabel_5 = new JLabel("Descripcion problema:");
-		lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel_5.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblNewLabel_5.setBounds(20, 227, 161, 23);
 		panelDerecho.add(lblNewLabel_5);
 		
 		JTextArea textDescripcion = new JTextArea();
+		textDescripcion.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		textDescripcion.setBorder(new LineBorder(Color.GRAY));
 		textDescripcion.setEditable(false);
 		textDescripcion.setWrapStyleWord(true);
@@ -253,26 +313,26 @@ public class ListadoTareasGUI extends JFrame {
 		panelDerecho.add(separator);
 		
 		JLabel lblNewLabel_4_1 = new JLabel("Patente:");
-		lblNewLabel_4_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel_4_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblNewLabel_4_1.setBounds(301, 187, 76, 23);
 		panelDerecho.add(lblNewLabel_4_1);
 		
 		JButton btnAgregarRepuesto = new JButton("Agregar Repuesto");
-		btnAgregarRepuesto.setBounds(324, 528, 133, 23);
+		btnAgregarRepuesto.setBounds(301, 528, 156, 23);
 		panelDerecho.add(btnAgregarRepuesto);
 		
 		JLabel lblNewLabel_2 = new JLabel("Tarea:");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblNewLabel_2.setBounds(20, 27, 46, 23);
 		panelDerecho.add(lblNewLabel_2);
 		
 		JLabel lblEstadoax = new JLabel("Estado:");
-		lblEstadoax.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblEstadoax.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblEstadoax.setBounds(165, 27, 76, 23);
 		panelDerecho.add(lblEstadoax);
 		
 		JLabel lblFechaCreacionax = new JLabel("Fecha creacion:");
-		lblFechaCreacionax.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblFechaCreacionax.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblFechaCreacionax.setBounds(20, 67, 111, 23);
 		panelDerecho.add(lblFechaCreacionax);
 		
@@ -282,50 +342,71 @@ public class ListadoTareasGUI extends JFrame {
 		panelDerecho.add(lblFechaEntregaax);
 		
 		JLabel lblDni = new JLabel("DNI:");
-		lblDni.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblDni.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblDni.setBounds(324, 107, 36, 23);
 		panelDerecho.add(lblDni);
 		
 		JLabel lblDNIcliente = new JLabel("");
-		lblDNIcliente.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblDNIcliente.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblDNIcliente.setBounds(368, 107, 89, 23);
 		panelDerecho.add(lblDNIcliente);
 		
 		JLabel lblFechaEntrega = new JLabel("");
-		lblFechaEntrega.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblFechaEntrega.setBounds(359, 67, 89, 23);
+		lblFechaEntrega.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblFechaEntrega.setBounds(359, 67, 116, 23);
 		panelDerecho.add(lblFechaEntrega);
 		
 		JLabel lblFechaCreacion = new JLabel("");
-		lblFechaCreacion.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblFechaCreacion.setBounds(128, 67, 89, 23);
+		lblFechaCreacion.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblFechaCreacion.setBounds(128, 67, 102, 23);
 		panelDerecho.add(lblFechaCreacion);
 		
 		JLabel lblMecanico = new JLabel("");
-		lblMecanico.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblMecanico.setBounds(106, 147, 169, 23);
+		lblMecanico.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblMecanico.setBounds(106, 147, 271, 23);
 		panelDerecho.add(lblMecanico);
 		
 		JLabel lblEstadoTarea = new JLabel("");
-		lblEstadoTarea.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblEstadoTarea.setBounds(238, 27, 89, 23);
+		lblEstadoTarea.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblEstadoTarea.setBounds(238, 27, 161, 23);
 		panelDerecho.add(lblEstadoTarea);
 		
 		JLabel lblIdTarea = new JLabel("");
-		lblIdTarea.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblIdTarea.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblIdTarea.setBounds(62, 27, 89, 23);
 		panelDerecho.add(lblIdTarea);
 		
 		JLabel lblAuto = new JLabel("");
-		lblAuto.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblAuto.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblAuto.setBounds(92, 189, 183, 23);
 		panelDerecho.add(lblAuto);
 		
 		JLabel lblPatente = new JLabel("");
-		lblPatente.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblPatente.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblPatente.setBounds(368, 187, 89, 23);
 		panelDerecho.add(lblPatente);
 		
+		btnActualizarTabla.setVisible(false);
+		btnActualizarTabla.setEnabled(false);
+		
+		comboBoxFiltros.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+
+					if(comboBoxFiltros.getSelectedIndex()==0 || comboBoxFiltros.getSelectedIndex()==1) {
+						panelBusquedaPalabra.setVisible(true);
+						panelBusquedaFechas.setVisible(false);
+					}
+					else {
+						panelBusquedaPalabra.setVisible(false);
+						panelBusquedaFechas.setVisible(true);
+					}
+
+				}
+
+			}
+		});
 		
 		
 		btnVolver.addActionListener(new ActionListener() {
@@ -374,7 +455,7 @@ public class ListadoTareasGUI extends JFrame {
 			}
 		});
 		
-		btnActualizarTabla.addMouseListener(new MouseAdapter() {
+		/*btnActualizarTabla.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				model.getDataVector().removeAllElements();
@@ -382,14 +463,15 @@ public class ListadoTareasGUI extends JFrame {
 				List<Tarea> actualizada =  gTarea.recuperarTareas();
 				for(Tarea t : actualizada) {
 					model.addRow(new Object[] {t.getIdTarea().toString(),
-							t.getCliente().getIdCliente().toString(),
-							t.getAuto().getIdAuto().toString(),
-							t.getMecanico().getPersona().getNumeroDocumento().toString(),
-							t.getFechaEntrega().toString()});
+							t.getCliente().getPersona().getNombre()+" "+t.getCliente().getPersona().getApellido(),
+							t.getAuto().getMarca()+" "+t.getAuto().getModelo(),
+							t.getMecanico().getPersona().getNombre()+" "+t.getMecanico().getPersona().getApellido(),
+							t.getFechaEntrega().getDayOfMonth()+"/"+t.getFechaEntrega().getMonthValue()+"/"+t.getFechaEntrega().getYear()
+							});
 				}
 				tableTareas.repaint();
 			}
-		});
+		});*/
 		
 		btnMostrarTodas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -398,10 +480,11 @@ public class ListadoTareasGUI extends JFrame {
 				List<Tarea> actualizada =  gTarea.recuperarTareas();
 				for(Tarea t : actualizada) {
 					model.addRow(new Object[] {t.getIdTarea().toString(),
-							t.getCliente().getIdCliente().toString(),
-							t.getAuto().getIdAuto().toString(),
-							t.getMecanico().getPersona().getNumeroDocumento().toString(),
-							t.getFechaEntrega().toString()});
+							t.getCliente().getPersona().getNombre()+" "+t.getCliente().getPersona().getApellido(),
+							t.getAuto().getMarca()+" "+t.getAuto().getModelo(),
+							t.getMecanico().getPersona().getNombre()+" "+t.getMecanico().getPersona().getApellido(),
+							t.getFechaEntrega().getDayOfMonth()+"/"+t.getFechaEntrega().getMonthValue()+"/"+t.getFechaEntrega().getYear()
+							});
 				}
 				tableTareas.repaint();
 			}
@@ -416,11 +499,12 @@ public class ListadoTareasGUI extends JFrame {
 				for(Tarea t : actualizada) {
 					if(t.getEstado().equals(EstadoTarea.PENDIENTE)) {//
 						hayPendientes=true;
-					model.addRow(new Object[] {t.getIdTarea().toString(),
-							t.getCliente().getIdCliente().toString(),
-							t.getAuto().getIdAuto().toString(),
-							t.getMecanico().getPersona().getNumeroDocumento().toString(),
-							t.getFechaEntrega().toString()});
+						model.addRow(new Object[] {t.getIdTarea().toString(),
+								t.getCliente().getPersona().getNombre()+" "+t.getCliente().getPersona().getApellido(),
+								t.getAuto().getMarca()+" "+t.getAuto().getModelo(),
+								t.getMecanico().getPersona().getNombre()+" "+t.getMecanico().getPersona().getApellido(),
+								t.getFechaEntrega().getDayOfMonth()+"/"+t.getFechaEntrega().getMonthValue()+"/"+t.getFechaEntrega().getYear()
+								});
 					}
 				}
 				if(hayPendientes) {
@@ -444,11 +528,13 @@ public class ListadoTareasGUI extends JFrame {
 				for(Tarea t : actualizada) {
 					if(t.getEstado().equals(EstadoTarea.FINALIZADA)) {//
 						hayPendientes=true;
-					model.addRow(new Object[] {t.getIdTarea().toString(),
-							t.getCliente().getIdCliente().toString(),
-							t.getAuto().getIdAuto().toString(),
-							t.getMecanico().getPersona().getNumeroDocumento().toString(),
-							t.getFechaEntrega().toString()});
+						model.addRow(new Object[] {t.getIdTarea().toString(),
+								t.getCliente().getPersona().getNombre()+" "+t.getCliente().getPersona().getApellido(),
+								t.getAuto().getMarca()+" "+t.getAuto().getModelo(),
+								t.getMecanico().getPersona().getNombre()+" "+t.getMecanico().getPersona().getApellido(),
+								t.getFechaEntrega().getDayOfMonth()+"/"+t.getFechaEntrega().getMonthValue()+"/"+t.getFechaEntrega().getYear()
+								});
+						
 					}
 				}
 				if(hayPendientes) {
@@ -472,11 +558,12 @@ public class ListadoTareasGUI extends JFrame {
 				for(Tarea t : actualizada) {
 					if(t.getEstado().equals(EstadoTarea.CANCELADA)) {//
 						hayPendientes=true;
-					model.addRow(new Object[] {t.getIdTarea().toString(),
-							t.getCliente().getIdCliente().toString(),
-							t.getAuto().getIdAuto().toString(),
-							t.getMecanico().getPersona().getNumeroDocumento().toString(),
-							t.getFechaEntrega().toString()});
+						model.addRow(new Object[] {t.getIdTarea().toString(),
+								t.getCliente().getPersona().getNombre()+" "+t.getCliente().getPersona().getApellido(),
+								t.getAuto().getMarca()+" "+t.getAuto().getModelo(),
+								t.getMecanico().getPersona().getNombre()+" "+t.getMecanico().getPersona().getApellido(),
+								t.getFechaEntrega().getDayOfMonth()+"/"+t.getFechaEntrega().getMonthValue()+"/"+t.getFechaEntrega().getYear()
+								});
 					}
 				}
 				if(hayPendientes) {
@@ -531,6 +618,132 @@ public class ListadoTareasGUI extends JFrame {
 				lblAuto.repaint();
 				lblPatente.repaint();
 				textDescripcion.repaint();
+			}
+		});
+		
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				List<Tarea> actualizada =  gTarea.recuperarTareas();
+				boolean hay=false;
+				
+				
+				if(comboBoxFiltros.getSelectedIndex()==0) {
+					if(!textFieldBusqueda.getText().toString().isEmpty()) {
+					model.getDataVector().removeAllElements();
+					model.fireTableDataChanged();
+					for(Tarea t : actualizada) {
+						String nomcompleto=t.getCliente().getPersona().getNombre()+" "+t.getCliente().getPersona().getApellido();
+						if(nomcompleto.toLowerCase().contains(textFieldBusqueda.getText().toString().toLowerCase())) {//
+							hay=true;
+							model.addRow(new Object[] {t.getIdTarea().toString(),
+									t.getCliente().getPersona().getNombre()+" "+t.getCliente().getPersona().getApellido(),
+									t.getAuto().getMarca()+" "+t.getAuto().getModelo(),
+									t.getMecanico().getPersona().getNombre()+" "+t.getMecanico().getPersona().getApellido(),
+									t.getFechaEntrega().getDayOfMonth()+"/"+t.getFechaEntrega().getMonthValue()+"/"+t.getFechaEntrega().getYear()
+									});
+						}
+					}
+					if(hay) {
+						tableTareas.repaint();
+					}
+					else {
+						JOptionPane.showMessageDialog(null, 
+				                "No se encontraron cliente con: "+textFieldBusqueda.getText().toString().toUpperCase(), 
+				                "CUIDADO", 
+				                JOptionPane.WARNING_MESSAGE);
+					}
+					}
+					else {
+						JOptionPane.showMessageDialog(null, 
+				                "Ingrese una busqueda.", 
+				                "CUIDADO", 
+				                JOptionPane.WARNING_MESSAGE);
+					}
+				}
+				else if (comboBoxFiltros.getSelectedIndex()==1){
+					if(!textFieldBusqueda.getText().toString().isEmpty()) {
+					model.getDataVector().removeAllElements();
+					model.fireTableDataChanged();
+					for(Tarea t : actualizada) {
+						String nomcompleto=t.getMecanico().getPersona().getNombre()+" "+t.getMecanico().getPersona().getApellido();
+						if(nomcompleto.toLowerCase().contains(textFieldBusqueda.getText().toString().toLowerCase())) {//
+							hay=true;
+							model.addRow(new Object[] {t.getIdTarea().toString(),
+									t.getCliente().getPersona().getNombre()+" "+t.getCliente().getPersona().getApellido(),
+									t.getAuto().getMarca()+" "+t.getAuto().getModelo(),
+									t.getMecanico().getPersona().getNombre()+" "+t.getMecanico().getPersona().getApellido(),
+									t.getFechaEntrega().getDayOfMonth()+"/"+t.getFechaEntrega().getMonthValue()+"/"+t.getFechaEntrega().getYear()
+									});
+						}
+					}
+					if(hay) {
+						tableTareas.repaint();
+					}
+					else {
+						JOptionPane.showMessageDialog(null, 
+				                "No se encontraron mecanicos con: "+textFieldBusqueda.getText().toString().toUpperCase(), 
+				                "CUIDADO", 
+				                JOptionPane.WARNING_MESSAGE);
+					}
+					}
+					else {
+						JOptionPane.showMessageDialog(null, 
+								"Ingrese una busqueda",
+								"CUIDADO", 
+				                JOptionPane.WARNING_MESSAGE);
+					}
+				}
+				else {
+					
+					if((dateChooserDesde.getDate()!=null && dateChooserHasta.getDate()!=null)) {
+					
+					LocalDate desde = dateChooserDesde.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+					LocalDate hasta = dateChooserHasta.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+					
+					DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+					desde.format(dtf);
+					hasta.format(dtf);
+					
+					if(desde.isBefore(hasta)) {
+						model.getDataVector().removeAllElements();
+						model.fireTableDataChanged();
+						for(Tarea t : actualizada) {
+							if(t.getFechaEntrega().isAfter(desde.minusDays(1)) && t.getFechaEntrega().isBefore(hasta.plusDays(1))) {//
+								hay=true;
+								model.addRow(new Object[] {t.getIdTarea().toString(),
+										t.getCliente().getPersona().getNombre()+" "+t.getCliente().getPersona().getApellido(),
+										t.getAuto().getMarca()+" "+t.getAuto().getModelo(),
+										t.getMecanico().getPersona().getNombre()+" "+t.getMecanico().getPersona().getApellido(),
+										t.getFechaEntrega().getDayOfMonth()+"/"+t.getFechaEntrega().getMonthValue()+"/"+t.getFechaEntrega().getYear()
+										});
+							}
+						}
+						if(hay) {
+							tableTareas.repaint();
+						}
+						else {
+							JOptionPane.showMessageDialog(null, 
+					                "No se encontraron tareas desde:"+dateChooserDesde.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().toString()
+					               +" hasta: "+dateChooserHasta.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), 
+					                "CUIDADO", 
+					                JOptionPane.WARNING_MESSAGE);
+						}
+					}
+					else {
+						JOptionPane.showMessageDialog(null, 
+								"La fecha 'desde' debe ser anterior a 'hasta'",
+				                "CUIDADO", 
+				                JOptionPane.WARNING_MESSAGE);
+					}
+					}
+					else {
+						JOptionPane.showMessageDialog(null, 
+								"Seleccione las fechas.",
+				                "CUIDADO", 
+				                JOptionPane.WARNING_MESSAGE);
+					}
+					
+				}
 			}
 		});
 		

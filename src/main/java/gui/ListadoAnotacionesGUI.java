@@ -151,10 +151,6 @@ public class ListadoAnotacionesGUI extends JFrame {
 		btnBuscar.setBounds(269, 58, 89, 23);
 		contentPane.add(btnBuscar);
 		
-		JButton btnBorrarTodas = new JButton("Borrar todas");
-		btnBorrarTodas.setBounds(366, 609, 108, 23);
-		contentPane.add(btnBorrarTodas);
-		
 		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 
