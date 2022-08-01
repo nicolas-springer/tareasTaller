@@ -216,7 +216,10 @@ public class AltaMecanicoGUI extends JFrame {
 
 	
 				if (hayvacios) {
-					JOptionPane.showMessageDialog(null, "Existen campos sin completar");
+					JOptionPane.showMessageDialog(null, 
+			                "Existen campos sin completar.", 
+			                "CUIDADO", 
+			                JOptionPane.WARNING_MESSAGE);
 				}
 				else {
 
@@ -238,6 +241,7 @@ public class AltaMecanicoGUI extends JFrame {
 							System.out.println(comboBoxLocalidad.getSelectedItem().toString());
 							mecDTO.setProvincia(comboBoxProvincias.getSelectedItem().toString());
 							System.out.println(comboBoxProvincias.getSelectedItem().toString());
+							
 							//en caso de no vivir en departamento se asigna 0 como valor default
 							if (!textFieldDepto.getText().isEmpty())
 								mecDTO.setDepartamento(Integer.parseInt(textFieldDepto.getText().toString()));
@@ -252,7 +256,7 @@ public class AltaMecanicoGUI extends JFrame {
 							if(textEspecialidad.getText().isEmpty()) {
 								mecDTO.setEspecialidad("no aclara");
 							}
-							else mecDTO.setEspecialidad(textEspecialidad.getText());
+							else mecDTO.setEspecialidad(textEspecialidad.getText().toString());
 							try {
 								gMecanico.darDeAltaMecanico(mecDTO);
 								JOptionPane.showMessageDialog(null, "Datos cargados correctamente");

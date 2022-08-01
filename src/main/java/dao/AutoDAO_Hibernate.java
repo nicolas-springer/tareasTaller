@@ -14,9 +14,10 @@ public class AutoDAO_Hibernate implements AutoDAO{
 	@Override
 	public List<Auto> recuperarAutoId(Integer idAuto) {
 		manager = ConnectionBD.conectar();
-		 
-		 return manager
-				.createQuery("SELECT a from auto where idauto ='"+idAuto+"'",Auto.class).getResultList();
+		List<Auto> lista = manager
+				.createQuery("SELECT a from auto a where idauto ='"+idAuto+"'",Auto.class).getResultList();
+		manager.close(); 
+		return lista;
 	}
 
 	@Override
@@ -41,9 +42,10 @@ public class AutoDAO_Hibernate implements AutoDAO{
 	@Override
 	public List<Auto> recuperarAutosDeClienteID(int id) {
 		manager = ConnectionBD.conectar();
-		 
-		 return manager
+		List<Auto> lista = manager
 				.createQuery("SELECT a from auto a where id_cliente ='"+id+"'",Auto.class).getResultList();
+		//manager.close();
+		return lista;
 	
 	}
 

@@ -60,7 +60,7 @@ public class GenerarTareaGUI extends JFrame {
 	Integer filaAutoTabla;
 	
 	public GenerarTareaGUI() {
-		setTitle("Dar alta cliente");
+		setTitle("Generar tarea");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 500, 550);
 		generarFrame();
@@ -165,7 +165,7 @@ public class GenerarTareaGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				//boolean existe = gCliente.verificarDNI(textFieldDNI.getText());
 				clienteAux = gCliente.recuperarClienteDNI(textFieldDNI.getText());
-				System.out.println("id: "+clienteAux.getIdCliente().toString());
+				//System.out.println("id: "+clienteAux.getIdCliente().toString());
 				if(clienteAux!=null) {
 					btnAgregarAuto.setEnabled(true);
 					lblNewLabel_4.setText(clienteAux.getPersona().getNombre()+" "+ clienteAux.getPersona().getApellido());
@@ -174,6 +174,7 @@ public class GenerarTareaGUI extends JFrame {
 						model.getDataVector().removeAllElements();
 						model.fireTableDataChanged();
 						for(Auto a : listaAutos) {
+							System.out.println("id auto: "+a.getIdAuto());
 							model.addRow(new Object[] {
 									a.getPatente().toString(),
 									a.getMarca().toString(),
@@ -246,15 +247,18 @@ public class GenerarTareaGUI extends JFrame {
 						
 						if(!hayvacios) {
 							
-							try {
+							
 								
+							try {
 								LocalDate fe = dcdate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();;
 								DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 								fe.format(dtf);
+							
 								
 								gTarea.generarTarea(clienteAux, autoTarea, mecanicoAsignado, descripcionProblema, fe);
-								JOptionPane.showMessageDialog(null, "Datos cargados correctamente");
+								JOptionPane.showMessageDialog(null, "Tarea asignada correctamente.");
 								dispose();
+								
 							} catch (Exception e2) {
 								JOptionPane.showMessageDialog(new JPanel(), e2.getMessage(), "Error",
 										JOptionPane.ERROR_MESSAGE);
@@ -302,7 +306,15 @@ public class GenerarTareaGUI extends JFrame {
 			mensajeerror+="Seleccione una fecha de entrega.";
 			flag=true;
 		}
-
+		else {
+			LocalDate fe = dcdate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();;
+			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			fe.format(dtf);
+			if(!fe.isAfter(LocalDate.now())){
+				mensajeerror+="La fecha de entrega debe ser posterior a la actual.";
+				flag=true;
+			}
+		}
 		if(flag) {
 			JOptionPane.showMessageDialog(null, 
                 mensajeerror, 

@@ -11,6 +11,8 @@ public interface TareaDAO {
 	 Tarea recuperarTarea(Integer id);
 	 Tarea recuperarTarea(Tarea t);
 	void finalizarTarea(Integer id);
+	void finalizarTarea(Tarea t);
 	void cancelarTarea(Integer id);
 	public List<Tarea> recuperarTareas();// para cargar la GUI de listado tareas
+	void cancelarTarea(Tarea t);
 }

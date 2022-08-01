@@ -10,5 +10,10 @@ public class GestorArranqueBD {
 		Localidad l = gLocalidad.recuperarLocalidadID(2084);//2084 id existentes en loc2
 		return l;
 	}
+
+	public void cargarProvinciasYLocalidades() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

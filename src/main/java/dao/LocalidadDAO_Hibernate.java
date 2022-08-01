@@ -20,6 +20,7 @@ public class LocalidadDAO_Hibernate implements LocalidadDAO{
 	public Localidad recuperarLocalidadNombre(String loc) {
 		manager = ConnectionBD.conectar();
 		Localidad l = manager.createQuery("select l from localidad l where nombre='"+loc+"'",Localidad.class).getSingleResult();
+		manager.close();
 		return l;
 	}
 
@@ -28,9 +29,10 @@ public class LocalidadDAO_Hibernate implements LocalidadDAO{
 		Integer idProv = gProvincia.obtenerIdDe(prov);
 		
 		manager = ConnectionBD.conectar();
-		
-		return manager.
+		List<Localidad> lista =manager.
 				createQuery("SELECT l FROM localidad l Where id_provincia ='" + idProv + "'", Localidad.class).getResultList(); 
+		manager.close();
+		return lista;
 	}
 
 	@Override

@@ -33,6 +33,7 @@ public class GestorMecanico {
 
 			Persona persona = gestorPersona.darDeAltaPersona(mec);
 			mecanico.inicializarMecanico(persona);//pasamos de MecanicoDTO a Objeto Mecanico
+			mecanico.setEspecialidad(mec.getEspecialidad().toString());
 			daoMecanico.guardarMecanico(mecanico);
 		}
 
@@ -51,25 +52,46 @@ public class GestorMecanico {
 		String mensaje = "Datos invalidos, revisar: " +"\n";
 		
 		String expression = "^[A-Z][a-z]+";
-		
 		Pattern formato = Pattern.compile(expression);
+		String expDNI = "[1-9][0-9]+";
+		Pattern formatoDNI = Pattern.compile(expDNI);
 		
-		if(!formato.matcher((CharSequence) textFieldApellido.getText()).matches()) {
-			mensaje +="Apellido (Ej: Perez)"+"\n";
-			apellidoValido=false;
+		String expTelefono = "[1-9][0-9]+";
+		Pattern formatoTel = Pattern.compile(expTelefono);
+	
+		String[] nombres = textFieldNombre.getText().toString().split(" ");
+		String[] apellidos = textFieldApellido.getText().toString().split(" ");
+		System.out.println(nombres.toString());
+		System.out.println(apellidos.toString());
+		for(String s: nombres) {
+			System.out.println(s);
+			if(!formato.matcher(s).matches()) {
+				mensaje +="Nombre (Ej: Mario ó Jose Luis)"+"\n";
+				nombreValido=false;
+			}
 		}
 		
-		if(!formato.matcher((CharSequence) textFieldNombre.getText()).matches()) {
-			mensaje +="Nombre (Ej: Mario)"+"\n";
-			nombreValido=false;
+		for(String s: apellidos) {
+			System.out.println(s);
+			if(!formato.matcher(s).matches()) {
+				mensaje +="Apellido (Ej: Mendez ó Del Valle)"+"\n";
+				nombreValido=false;
+			}
 		}
-		
-		if (textFieldDNI.getText().toString().length() != 8
+		if(!formatoDNI.matcher((CharSequence) textFieldDNI.getText()).matches()) {
+			mensaje += "El DNI solo debe contener NUMEROS";
+		}
+		else if (textFieldDNI.getText().toString().length() != 8
 				&& textFieldDNI.getText().toString().length() != 7) {
-			mensaje += "DNI (Longitud de 8 o 7)"+"\n";
+			mensaje += "DNI (Longitud de 8 o 7 numeros)"+"\n";
 			dniValido = false;
 		}
 
+		
+		if(!formatoTel.matcher((CharSequence) textFieldTelefono.getText().toString()).matches()) {
+			mensaje+="El TELEFONO solo debe conteners numeros.";
+		}
+		
 		if (textFieldTelefono.getText().toString().length() != 10) {
 			mensaje += "TELEFONO (Longitud de 10)"+"\n";
 			telefonoValido = false;
@@ -107,6 +129,10 @@ public class GestorMecanico {
 		
 		Persona p = gestorPersona.recuperarPersonaDNI(dniAsignado);
 		return daoMecanico.recuperarMecanicoID(p.getIdpersona());
+	}
+
+	public List<Mecanico> recuperarMecanicosConNombre(String nombre) {
+		return daoMecanico.recuperarMecanicosConNombre(nombre);
 	}
 	
 }

@@ -7,11 +7,13 @@ import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -33,7 +35,7 @@ public class ListadoClientesGUI extends JFrame {
 	private JPanel contentPane;
 	private JTextField textFieldBusqueda;
 	private JTable table;
-
+	List<Cliente> listaClientes;
 	public ListadoClientesGUI() {
 
 			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -80,7 +82,7 @@ public class ListadoClientesGUI extends JFrame {
 			DefaultTableModel model = new DefaultTableModel();
 			
 			final GestorCliente gCliente= new GestorCliente();
-			List<Cliente> listaClientes = gCliente.recuperarClientes();
+			listaClientes = gCliente.recuperarClientes();
 			final GestorDireccion gDireccion = new GestorDireccion();
 			final GestorLocalidad gLocalidad = new GestorLocalidad();
 			
@@ -122,6 +124,14 @@ public class ListadoClientesGUI extends JFrame {
 			lblNewLabel_2.setBounds(34, 128, 146, 14);
 			contentPane.add(lblNewLabel_2);
 			
+			JButton btnBuscar = new JButton("Buscar");
+			btnBuscar.setBounds(286, 82, 89, 23);
+			contentPane.add(btnBuscar);
+			
+			JButton btnMostrarTodos = new JButton("Mostrar todos");
+			btnMostrarTodos.setBounds(167, 125, 138, 23);
+			contentPane.add(btnMostrarTodos);
+			
 			
 			btnVolver.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -134,11 +144,170 @@ public class ListadoClientesGUI extends JFrame {
 				@Override
 				
 				public void actionPerformed(ActionEvent e) {
-					AltaMecanicoGUI altaMecanico = new AltaMecanicoGUI();
-					altaMecanico.setVisible(true);
-					//dispose();
+					AltaClienteGUI ac = new AltaClienteGUI();
+					ac.setVisible(true);
 				}
 			});
+			
+			btnMostrarTodos.addActionListener(new ActionListener() {
+				@Override
+				
+				public void actionPerformed(ActionEvent e) {
+					model.getDataVector().removeAllElements();
+					model.fireTableDataChanged();
+					for(Cliente c : listaClientes) {
+						Direccion d = gDireccion.recuperarDireccion(c.getPersona().getDireccion().getId_Direccion());
+						Localidad l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
+						model.addRow(new Object[]{c.getPersona().getApellido(),c.getPersona().getNombre(),
+								c.getPersona().getNumeroDocumento(),c.getPersona().getTelefono(),
+								d.getCalle(),d.getNumero(),d.getPiso(),d.getPiso(),l.getNombre()});
+					}
+					table.repaint();
+				}
+			});
+			
+			btnBuscar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					int key = comboBox.getSelectedIndex();
+					List<Mecanico> lista;
+					boolean existe = false;
+					Direccion d;
+					Localidad l;
+					switch (key) {
+					case 0:
+						
+						String nombre= textFieldBusqueda.getText().toString();
+						if(nombre.length()==0) {
+							JOptionPane.showMessageDialog(null, 
+					                "Escriba un nombre.", 
+					                "CUIDADO", 
+					                JOptionPane.WARNING_MESSAGE);
+						}
+						else {
+								model.getDataVector().removeAllElements();
+								model.fireTableDataChanged();
+								for(Cliente c : listaClientes) {
+									if(c.getPersona().getNombre().toString().toLowerCase().equals(nombre.toLowerCase()))
+									{
+										existe=true;
+									d = gDireccion.recuperarDireccion(c.getPersona().getDireccion().getId_Direccion());
+									l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
+									model.addRow(new Object[]{c.getPersona().getApellido(),c.getPersona().getNombre(),
+											c.getPersona().getNumeroDocumento(),c.getPersona().getTelefono(),
+											d.getCalle(),d.getNumero(),d.getPiso(),d.getPiso(),l.getNombre()});
+									}
+								}
+								if(existe)
+									
+									{
+									table.repaint();
+									}
+								else {
+									JOptionPane.showMessageDialog(null, 
+							                "No se encontraron mecanicos con el nombre: "+nombre.toUpperCase(), 
+							                "CUIDADO", 
+							                JOptionPane.WARNING_MESSAGE);
+								}
+							}
+						
+						break;	
+						case 1:
+						
+						String apellido= textFieldBusqueda.getText().toString();
+						if(apellido.length()==0) {
+							JOptionPane.showMessageDialog(null, 
+					                "Escriba un apellido.", 
+					                "CUIDADO", 
+					                JOptionPane.WARNING_MESSAGE);
+						}
+						else {
+							
+								model.getDataVector().removeAllElements();
+								model.fireTableDataChanged();
+								for(Cliente c: listaClientes) {
+									if(c.getPersona().getApellido().toString().toLowerCase().equals(apellido.toLowerCase())) {
+										existe=true;
+										d = gDireccion.recuperarDireccion(c.getPersona().getDireccion().getId_Direccion());
+										l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
+										model.addRow(new Object[]{c.getPersona().getApellido(),c.getPersona().getNombre(),
+												c.getPersona().getNumeroDocumento(),c.getPersona().getTelefono(),
+												d.getCalle(),d.getNumero(),d.getPiso(),d.getPiso(),l.getNombre()});
+									}
+									
+								}
+								if(existe)
+									
+									{
+									table.repaint();
+									}
+								else {
+									JOptionPane.showMessageDialog(null, 
+							                "No se encontraron mecanicos con el apellido: "+apellido.toUpperCase(), 
+							                "CUIDADO", 
+							                JOptionPane.WARNING_MESSAGE);
+								}
+							}
+						
+						break;
+						case 2:
+							String expDNI = "[1-9][0-9]+";
+							Pattern formatoDNI = Pattern.compile(expDNI);
+							String dni= textFieldBusqueda.getText().toString();
+							if(dni.length()==0) {
+								JOptionPane.showMessageDialog(null, 
+						                "Escriba un numero DNI.", 
+						                "CUIDADO", 
+						                JOptionPane.WARNING_MESSAGE);
+							}
+							else {
+								if(!formatoDNI.matcher((CharSequence) dni).matches()) {
+									JOptionPane.showMessageDialog(null, 
+											"El DNI solo debe contener NUMEROS", 
+							                "CUIDADO", 
+							                JOptionPane.WARNING_MESSAGE);
+								}
+								else if (dni.length() != 8
+										&& dni.length() != 7) {
+									JOptionPane.showMessageDialog(null, 
+											"DNI (Longitud de 8 o 7 numeros)", 
+							                "CUIDADO", 
+							                JOptionPane.WARNING_MESSAGE);
+								}
+								
+								else{ 
+									model.getDataVector().removeAllElements();
+								
+									model.fireTableDataChanged();
+									for(Cliente c: listaClientes) {
+										if(c.getPersona().getNumeroDocumento().toString().equals(dni)) {
+											existe=true;
+											d = gDireccion.recuperarDireccion(c.getPersona().getDireccion().getId_Direccion());
+											l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
+											model.addRow(new Object[]{c.getPersona().getApellido(),c.getPersona().getNombre(),
+													c.getPersona().getNumeroDocumento(),c.getPersona().getTelefono(),
+													d.getCalle(),d.getNumero(),d.getPiso(),d.getPiso(),l.getNombre()});
+										}
+									}
+									if(existe)
+										
+										{
+										table.repaint();
+										}
+									else {
+										JOptionPane.showMessageDialog(null, 
+								                "No se encontraron mecanicos con el numero DNI: "+dni.toUpperCase(), 
+								                "CUIDADO", 
+								                JOptionPane.WARNING_MESSAGE);
+									}
+								}
+							}
+							break;
+							}//end switch
+						}
+					
+			});
+			
+			
 	}
-
 }

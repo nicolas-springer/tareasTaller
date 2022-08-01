@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import dominio.Anotacion;
 import dominio.Mecanico;
 
 import util.ConnectionBD;
@@ -50,6 +51,14 @@ public class MecanicoDAO_Hibernate implements MecanicoDAO{
 		Mecanico r = manager.createQuery("select m from mecanico m where id_persona='"+idpersona+"'", Mecanico.class).getSingleResult();
 		manager.close();
 		return r;
+	}
+
+	@Override
+	public List<Mecanico> recuperarMecanicosConNombre(String nombre) {
+		manager = ConnectionBD.conectar();
+		List<Mecanico> lista = manager.createQuery("select m from mecanico a where nombre like '%"+nombre+"%'",Mecanico.class).getResultList();
+		manager.close();
+		return lista;
 	}
 
 

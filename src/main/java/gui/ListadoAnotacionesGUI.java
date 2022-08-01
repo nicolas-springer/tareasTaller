@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import dominio.Anotacion;
+import dominio.Localidad;
 import gestor.GestorAnotacion;
 import util.RenderListadoAnotaciones;
 
@@ -27,6 +28,9 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import com.toedter.calendar.JDateChooser;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class ListadoAnotacionesGUI extends JFrame {
 
@@ -44,6 +48,7 @@ public class ListadoAnotacionesGUI extends JFrame {
 		contentPane.setLayout(null);
 		
 		JComboBox<String> comboBox = new JComboBox<String>();
+		
 		comboBox.setBounds(92, 11, 151, 22);
 		comboBox.addItem("Palabra clave");
 		comboBox.addItem("Entre fechas");
@@ -95,27 +100,79 @@ public class ListadoAnotacionesGUI extends JFrame {
 		lblNewLabel_1.setBounds(10, 111, 108, 14);
 		contentPane.add(lblNewLabel_1);
 		
-		JButton btnAgregarNota = new JButton("Agregar Nota");
-		btnAgregarNota.setBounds(341, 627, 133, 23);
-		contentPane.add(btnAgregarNota);
-		
 		JButton btnVolver = new JButton("Volver");
 		btnVolver.setBounds(10, 627, 89, 23);
 		contentPane.add(btnVolver);
 		
+		JButton btnMostrarTodas = new JButton("Mostrar Todas");
+		btnMostrarTodas.setBounds(341, 109, 133, 23);
+		contentPane.add(btnMostrarTodas);
+		
+		JPanel panelBusquedaFechas = new JPanel();
+		panelBusquedaFechas.setVisible(false);
+		
+		JPanel panelBusquedaPalabraClave = new JPanel();
+		panelBusquedaPalabraClave.setBounds(10, 44, 253, 60);
+		contentPane.add(panelBusquedaPalabraClave);
+		panelBusquedaPalabraClave.setLayout(null);
+		
 		JLabel lblPalabreClave = new JLabel("Palabra Clave:");
+		lblPalabreClave.setBounds(10, 17, 83, 16);
+		panelBusquedaPalabraClave.add(lblPalabreClave);
 		lblPalabreClave.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblPalabreClave.setBounds(10, 54, 108, 14);
-		contentPane.add(lblPalabreClave);
 		
 		textFieldBusqueda = new JTextField();
-		textFieldBusqueda.setBounds(102, 52, 141, 20);
-		contentPane.add(textFieldBusqueda);
+		textFieldBusqueda.setBounds(103, 16, 144, 20);
+		panelBusquedaPalabraClave.add(textFieldBusqueda);
 		textFieldBusqueda.setColumns(10);
+		panelBusquedaFechas.setBounds(10, 44, 248, 60);
+		contentPane.add(panelBusquedaFechas);
+		panelBusquedaFechas.setLayout(null);
+		
+		JLabel lblPalabreClave_1 = new JLabel("Desde:");
+		lblPalabreClave_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblPalabreClave_1.setBounds(10, 11, 83, 16);
+		panelBusquedaFechas.add(lblPalabreClave_1);
+		
+		JLabel lblPalabreClave_1_1 = new JLabel("Hasta:");
+		lblPalabreClave_1_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblPalabreClave_1_1.setBounds(10, 38, 83, 16);
+		panelBusquedaFechas.add(lblPalabreClave_1_1);
+		
+		JDateChooser dateChooser = new JDateChooser();
+		dateChooser.setBounds(75, 11, 163, 20);
+		panelBusquedaFechas.add(dateChooser);
+		
+		JDateChooser dateChooser_1 = new JDateChooser();
+		dateChooser_1.setBounds(75, 40, 163, 20);
+		panelBusquedaFechas.add(dateChooser_1);
 		
 		JButton btnBuscar = new JButton("Buscar");
-		btnBuscar.setBounds(253, 51, 89, 23);
+		btnBuscar.setBounds(269, 58, 89, 23);
 		contentPane.add(btnBuscar);
+		
+		JButton btnBorrarTodas = new JButton("Borrar todas");
+		btnBorrarTodas.setBounds(366, 609, 108, 23);
+		contentPane.add(btnBorrarTodas);
+		
+		comboBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+
+					if(comboBox.getSelectedIndex()==0) {
+						panelBusquedaPalabraClave.setVisible(true);
+						panelBusquedaFechas.setVisible(false);
+					}
+					else {
+						panelBusquedaPalabraClave.setVisible(false);
+						panelBusquedaFechas.setVisible(true);
+					}
+
+				}
+
+			}
+		});
 		
 		btnBuscar.addActionListener(new ActionListener() {
 			
@@ -133,7 +190,6 @@ public class ListadoAnotacionesGUI extends JFrame {
 					else {
 						lista = gAnotacion.recuperarAnotacionesPalabraClave(palabra);
 						if(lista.size()!=0) {
-							System.out.println("lista no nula");
 							model.getDataVector().removeAllElements();
 							model.fireTableDataChanged();
 							
@@ -161,7 +217,26 @@ public class ListadoAnotacionesGUI extends JFrame {
 		});
 		
 
-		
-		
+		btnMostrarTodas.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					lista = gAnotacion.recuperarAnotaciones();
+					model.getDataVector().removeAllElements();
+					model.fireTableDataChanged();
+					
+					for(Anotacion a: lista) {
+						JTextArea tx = new JTextArea(a.getContenido().toString());
+						tx.setFont(new Font("Tahoma", Font.BOLD, 13));
+						model.addRow(new Object[] {tx,a.getFechaCreacion().toString()});
+					}
+					table.repaint();
+
+				}
+			});
+			
+		}
+	
+	
 	}
-}

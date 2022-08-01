@@ -14,25 +14,18 @@ import util.ConnectionBD;
 
 public class App {
 
-	//taler 
 	public static void main(String[] args) {	
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {	
-					//chequear provincias y localidades cargadas
-					
-					//Principal frame = new Principal();
-					//frame.setVisible(true);
-					//dni test: 30598741
-					boolean flag =true;
 					GestorArranqueBD gBD = new GestorArranqueBD();
-					
 					if(gBD.localidadesCargadas()!=null) {
 						MenuPrincipal menuP = new MenuPrincipal();
 						menuP.setVisible(true);
 					}
 					else {
 						System.out.println("no estan cargadas las provincias");
+						gBD.cargarProvinciasYLocalidades();
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -40,10 +33,5 @@ public class App {
 			}
 		});
 	}
-	
-	/*public static void main(String[] args) {
-		ConnectionBD bd = new ConnectionBD();
-		System.out.println(ConnectionBD.conectar());
-	}*/
 }
 

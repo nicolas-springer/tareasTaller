@@ -20,8 +20,10 @@ public class ProvinciaDAO_Hibernate implements ProvinciaDAO{
 	public List<Provincia> recuperarProvincias() {
 		
 		manager = ConnectionBD.conectar();
-		return (List<Provincia>) manager.createQuery(
-						 "SELECT p FROM provincia p ", Provincia.class ).getResultList();
+		List<Provincia> lista = manager.createQuery(
+				 "SELECT p FROM provincia p ", Provincia.class ).getResultList();
+		manager.close();
+		return lista;
 	}
 
 	@Override
@@ -31,7 +33,7 @@ public class ProvinciaDAO_Hibernate implements ProvinciaDAO{
 		List<Provincia> idProvincia = (List<Provincia>) manager
 				.createQuery("SELECT p FROM provincia p WHERE nombre ='"+p+"'",Provincia.class).getResultList();
 
-
+		manager.close();
 		return idProvincia.get(0).getIdProvincia();
 	}
 	@Override

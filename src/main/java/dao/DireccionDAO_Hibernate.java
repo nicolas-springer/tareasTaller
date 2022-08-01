@@ -26,6 +26,7 @@ public class DireccionDAO_Hibernate implements DireccionDAO {
 	public Direccion recuperarDireccionID(Integer id) {
 		manager = ConnectionBD.conectar();
 		Direccion d = manager.createQuery("select d from direccion d where id ="+id,Direccion.class).getSingleResult();
+		manager.close();
 		return d;
 	};
 	

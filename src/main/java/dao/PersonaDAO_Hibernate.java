@@ -32,7 +32,7 @@ public class PersonaDAO_Hibernate implements PersonaDAO {
 		
 		List<Persona> p =  manager
 			.createQuery("SELECT p FROM persona p WHERE numeroDocumento = '"+dni+"' ",Persona.class).getResultList();
-	
+		manager.close();
 		if(p.size() == 0) return false;
 		else return true;
 		
@@ -43,6 +43,7 @@ public class PersonaDAO_Hibernate implements PersonaDAO {
 		manager = ConnectionBD.conectar();
 		List<Persona> p =  manager
 				.createQuery("SELECT p FROM persona p WHERE numeroDocumento = '"+dni+"' ",Persona.class).getResultList();
+		manager.close();
 		if(p.size() == 0) return null;
 		else return p.get(0);
 		

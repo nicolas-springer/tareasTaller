@@ -26,11 +26,11 @@ import java.util.List;
 import javax.swing.JTextField;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 
 public class CargarAutoGUI extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textMarca;
 	private JTextField textPatente;
 	private JTextField textModelo;
 
@@ -70,12 +70,6 @@ public class CargarAutoGUI extends JFrame {
 		lblNewLabel_3.setBounds(52, 125, 78, 14);
 		contentPane.add(lblNewLabel_3);
 		
-		textMarca = new JTextField();
-		textMarca.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		textMarca.setBounds(140, 78, 141, 20);
-		contentPane.add(textMarca);
-		textMarca.setColumns(10);
-		
 		textPatente = new JTextField();
 		textPatente.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		textPatente.setBounds(140, 125, 141, 20);
@@ -96,12 +90,27 @@ public class CargarAutoGUI extends JFrame {
 		btnCancelar.setBounds(10, 245, 89, 23);
 		contentPane.add(btnCancelar);
 		
+		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox.setBounds(140, 77, 141, 22);
+		comboBox.addItem("Toyota");
+		comboBox.addItem("Volkswagen");
+		comboBox.addItem("Fiat");
+		comboBox.addItem("Renault");
+		comboBox.addItem("Ford");
+		comboBox.addItem("Chevrolet");
+		comboBox.addItem("Peugeot");
+		comboBox.addItem("Nissan");
+		comboBox.addItem("Honda");
+		comboBox.addItem("Chery");
+		comboBox.addItem("BMW");
+		comboBox.addItem("Ram");
+		contentPane.add(comboBox);
+		
 		btnAgregarAuto.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				List<JTextField> avalidar = new ArrayList<JTextField>();
-				avalidar.add(textMarca);
 				avalidar.add(textPatente);
 				avalidar.add(textModelo);
 	
@@ -112,10 +121,10 @@ public class CargarAutoGUI extends JFrame {
 
 					try {
 
-						Boolean validarDatosAuto = gAuto.validarDatos(textMarca,textPatente,textModelo);
+						Boolean validarDatosAuto = gAuto.validarDatos(textPatente,textModelo);
 						if (validarDatosAuto) {
 							AutoDTO autodto = new AutoDTO();
-							autodto.setMarca(textMarca.getText().toString());
+							autodto.setMarca(comboBox.getSelectedItem().toString());
 							autodto.setModelo(textModelo.getText().toString());
 							autodto.setPatente(textPatente.getText().toString());
 							autodto.setDnicliente(clienteAux.getPersona().getNumeroDocumento().toString());
@@ -157,5 +166,4 @@ public class CargarAutoGUI extends JFrame {
 	}
 		return flag;	
 	}
-	
 }

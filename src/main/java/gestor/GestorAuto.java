@@ -34,7 +34,7 @@ public class GestorAuto {
 		daoAuto.guardarAuto(a);
 	}
 
-	public Boolean validarDatos(JTextField textMarca, JTextField textPatente, JTextField textModelo) throws Exception {
+	public Boolean validarDatos(JTextField textModelo, JTextField textPatente) throws Exception {
 	
 		Boolean marca = true, patente = true, modelo = true;
 
@@ -47,19 +47,19 @@ public class GestorAuto {
 		Pattern formatoPatente6 = Pattern.compile(exp6);
 		Pattern formatoPatente7 = Pattern.compile(exp7);
 		Pattern formatoM = Pattern.compile(expM);
-		if(!formatoM.matcher((CharSequence) textMarca.getText()).matches()) {
-			mensaje +="Apellido (Ej: Perez)"+"\n";
+		/*if(!formatoM.matcher((CharSequence) textMarca.getText()).matches()) {
+			mensaje +=" Marca (Ej: Fiat)"+"\n";
 			marca=false;
-		}
+		}*/
 		
 		if(!formatoM.matcher((CharSequence) textModelo.getText()).matches()) {
-			mensaje +="Nombre (Ej: Mario)"+"\n";
+			mensaje +=" Modelo (Ej: Punto)"+"\n";
 			modelo=false;
 		}
 		
 		if (textPatente.getText().toString().length() != 6
 				&& textPatente.getText().toString().length() != 7) {
-			mensaje += " (Longitud de 6 o 7)"+"\n";
+			mensaje += " Patente (Longitud de 6 o 7)"+"\n";
 			patente = false;
 			
 		}

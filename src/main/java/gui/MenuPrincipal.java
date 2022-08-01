@@ -19,6 +19,7 @@ import gestor.GestorAnotacion;
 
 import java.awt.Color;
 import javax.swing.border.TitledBorder;
+
 import javax.swing.border.EtchedBorder;
 
 @SuppressWarnings("serial")
@@ -145,14 +146,6 @@ public class MenuPrincipal extends JFrame {
 		btnListadoDeMecanicos.setBounds(364, 440, 220, 40);
 		contentPane.add(btnListadoDeMecanicos);
 		
-		JLabel lblNewLabel_1 = new JLabel("enlace a explorador google");
-		lblNewLabel_1.setBounds(991, 196, 200, 14);
-		contentPane.add(lblNewLabel_1);
-		
-		JLabel lblNewLabel_2 = new JLabel("encale a bandeja de correo");
-		lblNewLabel_2.setBounds(991, 227, 207, 14);
-		contentPane.add(lblNewLabel_2);
-		
 		JLabel lblNewLabel_3 = new JLabel("Anotaciones:");
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_3.setBounds(959, 349, 125, 31);
@@ -201,10 +194,6 @@ public class MenuPrincipal extends JFrame {
 		lblReloj.setBounds(10, 11, 111, 40);
 		panel.add(lblReloj);
 		lblReloj.setFont(new Font("Tahoma", Font.PLAIN, 26));
-		
-		JLabel lblNewLabel_1_2 = new JLabel("Gadgets");
-		lblNewLabel_1_2.setBounds(991, 160, 200, 14);
-		contentPane.add(lblNewLabel_1_2);
 		
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM);
@@ -306,6 +295,9 @@ public class MenuPrincipal extends JFrame {
 				generarTarea.setVisible(true);
 			}
 		});
+
+		
+		
 		
 	}
 }

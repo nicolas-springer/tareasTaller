@@ -11,4 +11,6 @@ public interface MecanicoDAO {
 
 	Mecanico recuperarMecanicoID(Integer idpersona);
 
+	List<Mecanico> recuperarMecanicosConNombre(String nombre);
+
 }

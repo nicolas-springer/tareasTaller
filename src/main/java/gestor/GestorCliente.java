@@ -54,7 +54,11 @@ public class GestorCliente {
 		String expression = "^[A-Z][a-z]+";
 		
 		Pattern formato = Pattern.compile(expression);
-		
+		String expDNI = "[1-9][0-9]+";
+		Pattern formatoDNI = Pattern.compile(expDNI);
+
+		String expTelefono = "[1-9][0-9]+";
+		Pattern formatoTel = Pattern.compile(expTelefono);
 		if(!formato.matcher((CharSequence) textFieldApellido.getText()).matches()) {
 			mensaje +="Apellido (Ej: Perez)"+"\n";
 			apellidoValido=false;
@@ -65,13 +69,19 @@ public class GestorCliente {
 			nombreValido=false;
 		}
 		
-		if (textFieldDNI.getText().toString().length() != 8
+		if(!formatoDNI.matcher((CharSequence) textFieldDNI.getText()).matches()) {
+			mensaje += "El DNI solo debe contener NUMEROS";
+		}
+		else if (textFieldDNI.getText().toString().length() != 8
 				&& textFieldDNI.getText().toString().length() != 7) {
-			mensaje += "DNI (Longitud de 8 o 7)"+"\n";
+			mensaje += "DNI (Longitud de 8 o 7 numeros)"+"\n";
 			dniValido = false;
 		}
 
-		if (textFieldTelefono.getText().toString().length() != 10) {
+		if(!formatoTel.matcher((CharSequence) textFieldTelefono.getText().toString()).matches()) {
+			mensaje+="El TELEFONO solo debe conteners numeros.";
+		}
+		else if (textFieldTelefono.getText().toString().length() != 10) {
 			mensaje += "TELEFONO (Longitud de 10)"+"\n";
 			telefonoValido = false;
 		}

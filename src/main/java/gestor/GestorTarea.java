@@ -36,10 +36,14 @@ public class GestorTarea {
 	}
 	
 	public void finalizarTarea(Integer id) {
-		daoTarea.finalizarTarea(id);
+		Tarea t = daoTarea.recuperarTarea(id);
+		t.setEstado(EstadoTarea.FINALIZADA);
+		daoTarea.finalizarTarea(t);
 	}
 	public void cancelarTarea(Integer id){
-		daoTarea.cancelarTarea(id);
+		Tarea t = daoTarea.recuperarTarea(id);
+		t.setEstado(EstadoTarea.CANCELADA);
+		daoTarea.cancelarTarea(t);
 	}
 	
 	public List<Tarea> recuperarTareas(){
