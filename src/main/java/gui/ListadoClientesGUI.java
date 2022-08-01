@@ -41,7 +41,7 @@ public class ListadoClientesGUI extends JFrame {
 			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			setBounds(300, 150, 1280, 720);
 			setResizable(false);
-			setTitle("Gestion Mecanicos");
+			setTitle("Gestion Clientes");
 			setLocationRelativeTo(null); 
 			contentPane = new JPanel();
 			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

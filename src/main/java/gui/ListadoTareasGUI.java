@@ -12,6 +12,7 @@ import javax.swing.table.DefaultTableModel;
 import dominio.Tarea;
 import enumClasses.EstadoTarea;
 import gestor.GestorTarea;
+import util.ComparadorFechaEntregaCercana;
 
 import java.awt.ComponentOrientation;
 import java.awt.Cursor;
@@ -27,6 +28,7 @@ import javax.swing.JTable;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Collections;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
@@ -102,14 +104,12 @@ public class ListadoTareasGUI extends JFrame {
 		model.addColumn("Mecanico");
 		model.addColumn("FechaEntrega");
 		
+		
+		Collections.sort(listaTareas, new ComparadorFechaEntregaCercana());
+		
 		if(!(listaTareas.size()==0)) {
 			for(Tarea t : listaTareas) {
 				
-				/*model.addRow(new Object[] {t.getIdTarea().toString(),
-						t.getCliente().getIdCliente().toString(),
-						t.getAuto().getIdAuto().toString(),
-						t.getMecanico().getPersona().getNumeroDocumento().toString(),
-						t.getFechaEntrega().getDayOfMonth()+"/"+t.getFechaEntrega().getMonthValue()+"/"+t.getFechaEntrega().getYear()});*/
 				model.addRow(new Object[] {t.getIdTarea().toString(),
 						t.getCliente().getPersona().getNombre()+" "+t.getCliente().getPersona().getApellido(),
 						t.getAuto().getMarca()+" "+t.getAuto().getModelo(),
@@ -128,11 +128,10 @@ public class ListadoTareasGUI extends JFrame {
 		
 		tableTareas = new JTable(model);
 		tableTareas.setDefaultEditor(Object.class, null);
-		tableTareas.getColumnModel().getColumn(0).setPreferredWidth(15);//idtarea
-		tableTareas.getColumnModel().getColumn(1).setPreferredWidth(80);//cliente
+		tableTareas.getColumnModel().getColumn(0).setPreferredWidth(10);//idtarea
+		tableTareas.getColumnModel().getColumn(1).setPreferredWidth(90);//cliente
 		tableTareas.getColumnModel().getColumn(2).setPreferredWidth(70);//auto
-		tableTareas.getColumnModel().getColumn(3).setPreferredWidth(80);//mecanico
-		//tableTareas.getColumnModel().getColumn(4).setPreferredWidth(120);//fechaentrega
+		tableTareas.getColumnModel().getColumn(3).setPreferredWidth(90);//mecanico
 		tableTareas.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);//fechaentrega
 		
 		
@@ -478,6 +477,7 @@ public class ListadoTareasGUI extends JFrame {
 				model.getDataVector().removeAllElements();
 				model.fireTableDataChanged();
 				List<Tarea> actualizada =  gTarea.recuperarTareas();
+				Collections.sort(actualizada, new ComparadorFechaEntregaCercana());
 				for(Tarea t : actualizada) {
 					model.addRow(new Object[] {t.getIdTarea().toString(),
 							t.getCliente().getPersona().getNombre()+" "+t.getCliente().getPersona().getApellido(),
@@ -495,6 +495,7 @@ public class ListadoTareasGUI extends JFrame {
 				model.getDataVector().removeAllElements();
 				model.fireTableDataChanged();
 				List<Tarea> actualizada =  gTarea.recuperarTareas();
+				Collections.sort(actualizada, new ComparadorFechaEntregaCercana());
 				boolean hayPendientes=false;
 				for(Tarea t : actualizada) {
 					if(t.getEstado().equals(EstadoTarea.PENDIENTE)) {//
@@ -524,10 +525,11 @@ public class ListadoTareasGUI extends JFrame {
 				model.getDataVector().removeAllElements();
 				model.fireTableDataChanged();
 				List<Tarea> actualizada =  gTarea.recuperarTareas();
-				boolean hayPendientes=false;
+				Collections.sort(actualizada, new ComparadorFechaEntregaCercana());
+				boolean hayFinalizada=false;
 				for(Tarea t : actualizada) {
 					if(t.getEstado().equals(EstadoTarea.FINALIZADA)) {//
-						hayPendientes=true;
+						hayFinalizada=true;
 						model.addRow(new Object[] {t.getIdTarea().toString(),
 								t.getCliente().getPersona().getNombre()+" "+t.getCliente().getPersona().getApellido(),
 								t.getAuto().getMarca()+" "+t.getAuto().getModelo(),
@@ -537,7 +539,7 @@ public class ListadoTareasGUI extends JFrame {
 						
 					}
 				}
-				if(hayPendientes) {
+				if(hayFinalizada) {
 					tableTareas.repaint();
 				}
 				else {
@@ -554,10 +556,10 @@ public class ListadoTareasGUI extends JFrame {
 				model.getDataVector().removeAllElements();
 				model.fireTableDataChanged();
 				List<Tarea> actualizada =  gTarea.recuperarTareas();
-				boolean hayPendientes=false;
+				boolean hayCancelada=false;
 				for(Tarea t : actualizada) {
 					if(t.getEstado().equals(EstadoTarea.CANCELADA)) {//
-						hayPendientes=true;
+						hayCancelada=true;
 						model.addRow(new Object[] {t.getIdTarea().toString(),
 								t.getCliente().getPersona().getNombre()+" "+t.getCliente().getPersona().getApellido(),
 								t.getAuto().getMarca()+" "+t.getAuto().getModelo(),
@@ -566,7 +568,7 @@ public class ListadoTareasGUI extends JFrame {
 								});
 					}
 				}
-				if(hayPendientes) {
+				if(hayCancelada) {
 					tableTareas.repaint();
 				}
 				else {
@@ -583,7 +585,6 @@ public class ListadoTareasGUI extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				select = tableTareas.rowAtPoint(e.getPoint());
 				Integer idtar = Integer.parseInt(tableTareas.getValueAt(select, 0).toString());
-				//System.out.println("select : " + select);
 				for(Tarea t :listaTareas) {
 					if(t.getIdTarea() == idtar) {
 						lblIdTarea.setText(t.getIdTarea().toString());
@@ -748,4 +749,10 @@ public class ListadoTareasGUI extends JFrame {
 		});
 		
 	}
+	
+	
+	protected void ordenarFechaEntregaMasCercana() {
+		
+	}
+	
 }

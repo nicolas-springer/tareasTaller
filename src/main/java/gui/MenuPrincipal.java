@@ -33,19 +33,10 @@ public class MenuPrincipal extends JFrame {
 		setResizable(false);
 		setTitle("Gestiones");
 		setLocationRelativeTo(null); 
-		//cargar localidades y provincias sql
-		//GestorProvincia gp = new GestorProvincia();
-		//GestorLocalidad gl = new GestorLocalidad();
-		//gp.cargarProvinciasBD();
-		//gl.cargarLocalidadesBD();
 		generarMenuPrincipal();
-
 	}
 
 	public void generarMenuPrincipal() {
-
-		
-		
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

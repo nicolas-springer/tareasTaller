@@ -76,9 +76,7 @@ public class ListadoMecanicosGUI extends JFrame {
 			scrollPane.setBounds(34, 155, 1188, 299);
 			contentPane.add(scrollPane);
 			
-			String[] colTareas= {"Apellido", "Nombre", "DNI","Telefono", "Calle" , "Numero", "Piso", "Depto","Localidad","Especialidad"};
-			//Object[][] datosFilaMecanicos = { };
-			
+			String[] colTareas= {"Apellido", "Nombre", "DNI","Telefono", "Calle" , "Numero", "Piso", "Depto","Localidad","Especialidad"};			
 			DefaultTableModel model = new DefaultTableModel();
 			
 			final GestorMecanico gMecanico= new GestorMecanico();
@@ -89,8 +87,7 @@ public class ListadoMecanicosGUI extends JFrame {
 			for (String s : colTareas) model.addColumn(s);
 
 			for(Mecanico m : listaMec) {
-				//Direccion d = m.getPersona().getDireccion();
-				
+				//Direccion d = m.getPersona().getDireccion();	
 				//Localidad l = d.getLocalidad();
 				Direccion d = gDireccion.recuperarDireccion(m.getPersona().getDireccion().getId_Direccion());
 				Localidad l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());

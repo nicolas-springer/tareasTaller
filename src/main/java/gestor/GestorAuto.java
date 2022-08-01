@@ -84,8 +84,18 @@ public class GestorAuto {
 		if (!marca || !modelo || !patente) {
 			throw new Exception(mensaje);
 		} else
-			return true;
+		{
+			Auto a = recuperarAutoConPatente(textPatente.getText().toString());
+			if( a!=null) {
+				throw new Exception("Ya existe un vehiculo con la patente: "+textPatente.getText().toString().toUpperCase());
+			}
+			else {
+				return true;
+			}
+		}
 	}
+
+
 
 	public Auto recuperarAutoConPatente(String pat) {
 		return daoAuto.recuperarAutoConPatente(pat);

@@ -44,7 +44,7 @@ public class AutoDAO_Hibernate implements AutoDAO{
 		manager = ConnectionBD.conectar();
 		List<Auto> lista = manager
 				.createQuery("SELECT a from auto a where id_cliente ='"+id+"'",Auto.class).getResultList();
-		//manager.close();
+		manager.close();
 		return lista;
 	
 	}
@@ -53,10 +53,16 @@ public class AutoDAO_Hibernate implements AutoDAO{
 	public Auto recuperarAutoConPatente(String pat) {
 		manager = ConnectionBD.conectar();
 		 
-		 Auto a = manager
-				.createQuery("SELECT a from auto a where patente ='"+pat+"'",Auto.class).getSingleResult();
+		 List<Auto> a = manager
+				.createQuery("SELECT a from auto a where patente like'"+pat+"'",Auto.class).getResultList();
 		 manager.close();
-		 return a;
+		 
+		 if (a.size()==0) {
+			 return null;
+		 }
+		 else {
+			 return a.get(0);
+		 }
 	}
 
 
