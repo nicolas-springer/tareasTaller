@@ -17,7 +17,9 @@ public class ConnectionBD {
 
 		try {
 			emf = Persistence.createEntityManagerFactory("aplicaciontaller");
+			System.out.println("emf : " + emf.toString());
 			manager = emf.createEntityManager();
+			System.out.println("Manager: "+ manager.toString());
 		
 			manager.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
 

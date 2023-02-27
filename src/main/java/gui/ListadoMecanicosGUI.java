@@ -86,12 +86,15 @@ public class ListadoMecanicosGUI extends JFrame {
 			
 			for (String s : colTareas) model.addColumn(s);
 
+			// DEBERIA TRAER TODAS LA DIRECCIONES ANTES
+			// guardar direcciones como strings y listo
 			for(Mecanico m : listaMec) {
+				
 				//Direccion d = m.getPersona().getDireccion();	
 				//Localidad l = d.getLocalidad();
 				Direccion d = gDireccion.recuperarDireccion(m.getPersona().getDireccion().getId_Direccion());
 				Localidad l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
-				
+				//System.out.println(m.getPersona().getDireccion().getCalle());
 				model.addRow(new Object[]{m.getPersona().getApellido(),m.getPersona().getNombre(),
 						m.getPersona().getNumeroDocumento(),m.getPersona().getTelefono(),
 						d.getCalle(),d.getNumero(),d.getPiso(),d.getPiso(),l.getNombre(),

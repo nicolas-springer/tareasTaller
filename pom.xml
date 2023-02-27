@@ -9,24 +9,27 @@
   <dependencies>
 
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>5.5.6.Final</version>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-core</artifactId>
+		    <version>6.1.7.Final</version>
+		    <type>pom</type>
 		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+    		<artifactId>hibernate-entitymanager</artifactId>
+    		<version>5.6.15.Final</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>javax.persistence</groupId>
 			<artifactId>persistence-api</artifactId>
 			<version>1.0.2</version>
 		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>5.5.6.Final</version>
-		</dependency>
+		
 		<dependency>
 			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>42.2.15</version>
+    			<artifactId>postgresql</artifactId>
+   			 <version>42.5.1</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-validator</groupId>
@@ -43,12 +46,17 @@
 			<artifactId>jasperreports</artifactId>
 			<version>6.18.1</version>
 		</dependency>
-
+	<dependency>
+	    <groupId>com.toedter</groupId>
+	    <artifactId>jcalendar</artifactId>
+    <version>1.4</version>
+</dependency>
 
 	</dependencies>
   
   <build>
     <plugins>
+    
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
@@ -56,6 +64,30 @@
           <release>17</release>
         </configuration>
       </plugin>
+      <plugin>
+      <artifactId>maven-assembly-plugin</artifactId>
+      <version>3.3.0</version>
+      <configuration>
+        <archive>
+          <manifest>
+            <mainClass>app.App</mainClass>
+          </manifest>
+        </archive>
+        <descriptorRefs>
+          <descriptorRef>jar-with-dependencies</descriptorRef>
+        </descriptorRefs>
+      </configuration>
+      <executions>
+        <execution>
+          <id>make-assembly</id>
+          <phase>package</phase>
+          <goals>
+            <goal>single</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+      
     </plugins>
   </build>
 </project>

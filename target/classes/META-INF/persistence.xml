@@ -7,8 +7,7 @@
 
 
 
-   <persistence-unit name="aplicaciontaller">
-    
+   <persistence-unit name="aplicaciontaller" transaction-type="RESOURCE_LOCAL">
     	<class> dominio.Provincia</class>
     	<class> dominio.Localidad</class>
      	<class> dominio.Direccion</class>
@@ -18,7 +17,6 @@
         <class> dominio.Auto</class>
 		<class> dominio.Repuesto</class>
 		<class> dominio.Tarea</class>
-
  	            
         <properties>
             <property name="javax.persistence.jdbc.driver"
@@ -37,6 +35,8 @@
                 value="true" />
             <property name="hibernate.temp.use_jdbc_metadata_defaults"
                 value="false" />
+            <!--  <property name="javax.persistence.schema-generation.scripts.create-source" value="META-INF/persistence.xml"/>
+                -->
                 
         </properties>
     </persistence-unit>

@@ -4,9 +4,13 @@ import java.awt.EventQueue;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.persistence.EntityManager;
+
+import dominio.Anotacion;
 import gestor.GestorArranqueBD;
 import gui.MenuPrincipal;
 import gui.Principal;
@@ -17,10 +21,11 @@ public class App {
 	public static void main(String[] args) {	
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				MenuPrincipal menuP = new MenuPrincipal();
+				menuP.setVisible(true);
 				try {	
 					GestorArranqueBD gBD = new GestorArranqueBD();
 					if(gBD.localidadesCargadas()!=null) {
-						MenuPrincipal menuP = new MenuPrincipal();
 						menuP.setVisible(true);
 					}
 					else {
@@ -29,7 +34,7 @@ public class App {
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-				}
+				}	
 			}
 		});
 	}

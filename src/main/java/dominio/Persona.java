@@ -111,15 +111,6 @@ public class Persona {
 		this.idPersona = idpersona;
 	}
 
-	
-	/*public Integer getEdad() {	
-		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("d/M/yyyy");
-		LocalDate fechaNac = LocalDate.parse(nacimiento, fmt);
-		LocalDate hoy = LocalDate.now();	
-		Period periodo = Period.between(fechaNac, hoy);
-		return periodo.getYears();
-	*/
-
 	public void inicializarPersona(MecanicoDTO mecanicoDTO, Direccion dir) {
 		this.setApellido(mecanicoDTO.getApellido());
 		this.setNombre(mecanicoDTO.getNombre());
