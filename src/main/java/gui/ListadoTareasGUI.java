@@ -60,13 +60,12 @@ public class ListadoTareasGUI extends JFrame {
 	int select;//fila de la tabla
 	
 	public ListadoTareasGUI() {
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(300, 150, 1280, 720);
 		setResizable(false);
 		setTitle("Gestion Tareas");
 		setLocationRelativeTo(null); 
 		generarListadoTareasGUI();
-
 		
 	}
 	public void generarListadoTareasGUI() {
@@ -128,10 +127,10 @@ public class ListadoTareasGUI extends JFrame {
 		
 		tableTareas = new JTable(model);
 		tableTareas.setDefaultEditor(Object.class, null);
-		tableTareas.getColumnModel().getColumn(0).setPreferredWidth(10);//idtarea
-		tableTareas.getColumnModel().getColumn(1).setPreferredWidth(90);//cliente
-		tableTareas.getColumnModel().getColumn(2).setPreferredWidth(70);//auto
-		tableTareas.getColumnModel().getColumn(3).setPreferredWidth(90);//mecanico
+		tableTareas.getColumnModel().getColumn(0).setPreferredWidth(6);//idtarea
+		tableTareas.getColumnModel().getColumn(1).setPreferredWidth(95);//cliente
+		tableTareas.getColumnModel().getColumn(2).setPreferredWidth(130);//auto
+		tableTareas.getColumnModel().getColumn(3).setPreferredWidth(95);//mecanico
 		tableTareas.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);//fechaentrega
 		
 		
@@ -419,17 +418,18 @@ public class ListadoTareasGUI extends JFrame {
 		btnFinalizarTarea.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Integer idtar = Integer.parseInt(tableTareas.getValueAt(select, 0).toString());
-				System.out.println("finalizar:"+idtar);
 				gTarea.finalizarTarea(idtar);
-				
+				JOptionPane.showMessageDialog(null, "Tarea finalizada correctamente");
+				listaTareas =  gTarea.recuperarTareas();
 			}
 		});
 		
 		btnCancelarTarea.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Integer idtar = Integer.parseInt(tableTareas.getValueAt(select, 0).toString());
-				System.out.println("cancelar:"+idtar);
 				gTarea.cancelarTarea(idtar);
+				JOptionPane.showMessageDialog(null, "Tarea cancelada correctamente");
+				listaTareas =  gTarea.recuperarTareas();
 				
 			}
 		});
@@ -442,8 +442,9 @@ public class ListadoTareasGUI extends JFrame {
 				//actualizar tabla
 				model.getDataVector().removeAllElements();
 				model.fireTableDataChanged();
-				List<Tarea> actualizada =  gTarea.recuperarTareas();
-				for(Tarea t : actualizada) {
+				//List<Tarea> actualizada =  gTarea.recuperarTareas();
+				listaTareas =  gTarea.recuperarTareas();
+				for(Tarea t : listaTareas) {
 					model.addRow(new Object[] {t.getIdTarea().toString(),
 							t.getCliente().getIdCliente().toString(),
 							t.getAuto().getIdAuto().toString(),
@@ -476,7 +477,9 @@ public class ListadoTareasGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				model.getDataVector().removeAllElements();
 				model.fireTableDataChanged();
-				List<Tarea> actualizada =  gTarea.recuperarTareas();
+				//List<Tarea> actualizada =  gTarea.recuperarTareas();
+				List<Tarea> actualizada =  listaTareas;
+				
 				Collections.sort(actualizada, new ComparadorFechaEntregaCercana());
 				for(Tarea t : actualizada) {
 					model.addRow(new Object[] {t.getIdTarea().toString(),
@@ -494,7 +497,8 @@ public class ListadoTareasGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				model.getDataVector().removeAllElements();
 				model.fireTableDataChanged();
-				List<Tarea> actualizada =  gTarea.recuperarTareas();
+				//List<Tarea> actualizada =  gTarea.recuperarTareas();
+				List<Tarea> actualizada =  listaTareas;
 				Collections.sort(actualizada, new ComparadorFechaEntregaCercana());
 				boolean hayPendientes=false;
 				for(Tarea t : actualizada) {
@@ -524,7 +528,8 @@ public class ListadoTareasGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				model.getDataVector().removeAllElements();
 				model.fireTableDataChanged();
-				List<Tarea> actualizada =  gTarea.recuperarTareas();
+				//List<Tarea> actualizada =  gTarea.recuperarTareas();
+				List<Tarea> actualizada =  listaTareas;
 				Collections.sort(actualizada, new ComparadorFechaEntregaCercana());
 				boolean hayFinalizada=false;
 				for(Tarea t : actualizada) {
@@ -555,7 +560,8 @@ public class ListadoTareasGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				model.getDataVector().removeAllElements();
 				model.fireTableDataChanged();
-				List<Tarea> actualizada =  gTarea.recuperarTareas();
+				//List<Tarea> actualizada =  gTarea.recuperarTareas();
+				List<Tarea> actualizada =  listaTareas;
 				boolean hayCancelada=false;
 				for(Tarea t : actualizada) {
 					if(t.getEstado().equals(EstadoTarea.CANCELADA)) {//

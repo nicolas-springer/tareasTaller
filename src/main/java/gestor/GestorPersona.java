@@ -1,7 +1,10 @@
 package gestor;
 
+import javax.persistence.EntityManager;
+
 import dao.PersonaDAO;
 import dao.PersonaDAO_Hibernate;
+import dominio.Cliente;
 import dominio.Direccion;
 import dominio.Persona;
 import dto.ClienteDTO;
@@ -14,8 +17,9 @@ public class GestorPersona {
 	public Persona darDeAltaPersona(MecanicoDTO mecanicoDTO) {
 
 		GestorDireccion gestorDireccion = new GestorDireccion();
-		Direccion direccion = gestorDireccion.generarDireccion(mecanicoDTO.getCalle(), mecanicoDTO.getNumeroCalle(),mecanicoDTO.getDepartamento(), mecanicoDTO.getPiso(), mecanicoDTO.getLocalidad());
-		System.out.println(direccion.getLocalidad());
+		Direccion direccion = gestorDireccion.generarDireccion(mecanicoDTO.getCalle(), mecanicoDTO.getNumeroCalle(),
+				mecanicoDTO.getDepartamento(), mecanicoDTO.getPiso(), mecanicoDTO.getLocalidad(), mecanicoDTO.getProvincia());
+		//System.out.println(direccion.getLocalidad());
 		Persona persona = new Persona();
 		persona.inicializarPersona(mecanicoDTO, direccion);
 
@@ -31,8 +35,8 @@ public class GestorPersona {
 
 	public Persona darDeAltaPersona(ClienteDTO clienteDTO) {
 		GestorDireccion gestorDireccion = new GestorDireccion();
-		Direccion direccion = gestorDireccion.generarDireccion(clienteDTO.getCalle(), clienteDTO.getNumeroCalle(),clienteDTO.getDepartamento(), clienteDTO.getPiso(), clienteDTO.getLocalidad());
-		System.out.println(direccion.getLocalidad());
+		Direccion direccion = gestorDireccion.generarDireccion(clienteDTO.getCalle(), clienteDTO.getNumeroCalle(),clienteDTO.getDepartamento(), clienteDTO.getPiso(), clienteDTO.getLocalidad(), clienteDTO.getProvincia());
+		//System.out.println(direccion.getLocalidad());
 		Persona persona = new Persona();
 		persona.inicializarPersona(clienteDTO, direccion);
 
@@ -44,5 +48,6 @@ public class GestorPersona {
 	public Persona recuperarPersonaDNI(String text) {
 		return daoPersona.recuperarPersonaDNI(Integer.parseInt(text));
 	}
+
 	
 }

@@ -9,6 +9,7 @@ import dominio.Anotacion;
 import dominio.Direccion;
 import dominio.Localidad;
 import dominio.Mecanico;
+import dominio.MecanicoDireccion;
 import gestor.GestorDireccion;
 import gestor.GestorLocalidad;
 import gestor.GestorMecanico;
@@ -33,10 +34,11 @@ public class ListadoMecanicosGUI extends JFrame {
 	private JPanel contentPane;
 	private JTextField textFieldBusqueda;
 	private JTable table;
-	List<Mecanico> listaMec;
+	//List<Mecanico> listaMec;
+	//List<Direccion> listaDir;
 	public ListadoMecanicosGUI() {
 
-			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			setBounds(300, 150, 1280, 720);
 			setResizable(false);
 			setTitle("Gestion Mecanicos");
@@ -80,24 +82,34 @@ public class ListadoMecanicosGUI extends JFrame {
 			DefaultTableModel model = new DefaultTableModel();
 			
 			final GestorMecanico gMecanico= new GestorMecanico();
-			listaMec = gMecanico.recuperarMecanicos();
+			MecanicoDireccion md = gMecanico.getMecanicosDirecciones();
+			//listaMec = gMecanico.recuperarMecanicos();
 			final GestorDireccion gDireccion = new GestorDireccion();
-			final GestorLocalidad gLocalidad = new GestorLocalidad();
+			//listaDir = gDireccion.recuperarDirecciones();
+			//final GestorLocalidad gLocalidad = new GestorLocalidad();
 			
 			for (String s : colTareas) model.addColumn(s);
 
-			// DEBERIA TRAER TODAS LA DIRECCIONES ANTES
-			// guardar direcciones como strings y listo
-			for(Mecanico m : listaMec) {
-				
-				//Direccion d = m.getPersona().getDireccion();	
-				//Localidad l = d.getLocalidad();
-				Direccion d = gDireccion.recuperarDireccion(m.getPersona().getDireccion().getId_Direccion());
-				Localidad l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
-				//System.out.println(m.getPersona().getDireccion().getCalle());
+			for(Mecanico m : md.getMecanicos()) {
+				String calle="";
+				String numero="";
+				String piso="";
+				String dpto ="";
+				String localidad ="";
+				for(Direccion d : md.getDirecciones()) {	
+					if(d.getId_Direccion() == m.getPersona().getDireccion().getId_Direccion()) {
+						System.out.println(d.getId_Direccion());
+						calle=d.getCalle();
+						numero=d.getNumero().toString();
+						piso=d.getPiso().toString();
+						dpto= d.getDto().toString();
+						localidad=d.getLocalidad();
+						break;
+					}	
+				}
 				model.addRow(new Object[]{m.getPersona().getApellido(),m.getPersona().getNombre(),
 						m.getPersona().getNumeroDocumento(),m.getPersona().getTelefono(),
-						d.getCalle(),d.getNumero(),d.getPiso(),d.getPiso(),l.getNombre(),
+					calle,numero,piso,dpto,localidad,
 						m.getEspecialidad().toString()});
 			}
 			
@@ -161,10 +173,10 @@ public class ListadoMecanicosGUI extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					
 					int key = comboBox.getSelectedIndex();
-					List<Mecanico> lista;
+					//List<Mecanico> lista;
 					boolean existe = false;
 					Direccion d;
-					Localidad l;
+					//Localidad l;
 					switch (key) {
 					case 0:
 						
@@ -178,14 +190,14 @@ public class ListadoMecanicosGUI extends JFrame {
 						else {
 								model.getDataVector().removeAllElements();
 								model.fireTableDataChanged();
-								for(Mecanico m : listaMec) {
+								for(Mecanico m : md.getMecanicos()) {
 									if(m.getPersona().getNombre().toString().toLowerCase().equals(nombre.toLowerCase())) {
 										existe=true;
 										d = gDireccion.recuperarDireccion(m.getPersona().getDireccion().getId_Direccion());
-										l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
+										//l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
 										model.addRow(new Object[]{m.getPersona().getApellido(),m.getPersona().getNombre(),
 												m.getPersona().getNumeroDocumento(),m.getPersona().getTelefono(),
-												d.getCalle(),d.getNumero(),d.getPiso(),d.getPiso(),l.getNombre(),
+												d.getCalle(),d.getNumero(),d.getPiso(),d.getPiso(),d.getLocalidad(),
 												m.getEspecialidad().toString()});
 									}
 									
@@ -216,14 +228,14 @@ public class ListadoMecanicosGUI extends JFrame {
 						else {
 								model.getDataVector().removeAllElements();
 								model.fireTableDataChanged();
-								for(Mecanico m : listaMec) {
+								for(Mecanico m : md.getMecanicos()) {
 									if(m.getPersona().getApellido().toString().toLowerCase().equals(apellido.toLowerCase())) {
 										existe=true;
 										d = gDireccion.recuperarDireccion(m.getPersona().getDireccion().getId_Direccion());
-										l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
+										//l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
 										model.addRow(new Object[]{m.getPersona().getApellido(),m.getPersona().getNombre(),
 												m.getPersona().getNumeroDocumento(),m.getPersona().getTelefono(),
-												d.getCalle(),d.getNumero(),d.getPiso(),d.getPiso(),l.getNombre(),
+												d.getCalle(),d.getNumero(),d.getPiso(),d.getPiso(),d.getLocalidad(),
 												m.getEspecialidad().toString()});
 									}
 									
@@ -273,14 +285,14 @@ public class ListadoMecanicosGUI extends JFrame {
 									
 									model.getDataVector().removeAllElements();
 									model.fireTableDataChanged();
-									for(Mecanico m : listaMec) {
+									for(Mecanico m : md.getMecanicos()) {
 										if(m.getPersona().getNumeroDocumento().toString().equals(dni)) {
 											existe=true;
 											d = gDireccion.recuperarDireccion(m.getPersona().getDireccion().getId_Direccion());
-											l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
+											//l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
 											model.addRow(new Object[]{m.getPersona().getApellido(),m.getPersona().getNombre(),
 													m.getPersona().getNumeroDocumento(),m.getPersona().getTelefono(),
-													d.getCalle(),d.getNumero(),d.getPiso(),d.getPiso(),l.getNombre(),
+													d.getCalle(),d.getNumero(),d.getPiso(),d.getPiso(),d.getLocalidad(),
 													m.getEspecialidad().toString()});
 										}
 										
@@ -313,20 +325,19 @@ public class ListadoMecanicosGUI extends JFrame {
 							else {
 									model.getDataVector().removeAllElements();
 									model.fireTableDataChanged();
-									for(Mecanico m : listaMec) {
+									for(Mecanico m : md.getMecanicos()) {
 										if(m.getEspecialidad().contains(especialidad)) {
 											existe=true;
 											d = gDireccion.recuperarDireccion(m.getPersona().getDireccion().getId_Direccion());
-											l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
+											//l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
 											model.addRow(new Object[]{m.getPersona().getApellido(),m.getPersona().getNombre(),
 													m.getPersona().getNumeroDocumento(),m.getPersona().getTelefono(),
-													d.getCalle(),d.getNumero(),d.getPiso(),d.getPiso(),l.getNombre(),
+													d.getCalle(),d.getNumero(),d.getPiso(),d.getPiso(),d.getLocalidad(),
 													m.getEspecialidad().toString()});
 										}
 										
 									}
 									if(existe)
-										
 										{
 										table.repaint();
 										}
@@ -347,16 +358,15 @@ public class ListadoMecanicosGUI extends JFrame {
 			
 			btnMostrarTodos.addActionListener(new ActionListener() {
 				@Override
-				
 				public void actionPerformed(ActionEvent e) {
 					model.getDataVector().removeAllElements();
 					model.fireTableDataChanged();
-					for(Mecanico m : listaMec) {
+					for(Mecanico m : md.getMecanicos()) {
 						Direccion d = gDireccion.recuperarDireccion(m.getPersona().getDireccion().getId_Direccion());
-						Localidad l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
+						//Localidad l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
 						model.addRow(new Object[]{m.getPersona().getApellido(),m.getPersona().getNombre(),
 								m.getPersona().getNumeroDocumento(),m.getPersona().getTelefono(),
-								d.getCalle(),d.getNumero(),d.getPiso(),d.getPiso(),l.getNombre(),
+								d.getCalle(),d.getNumero(),d.getPiso(),d.getDto(),d.getLocalidad(),
 								m.getEspecialidad().toString()});
 					}
 					table.repaint();

@@ -18,10 +18,13 @@ public class Direccion {
 	private Integer piso;
 	@Column
 	private Integer dto;
+	@Column
+	private String localidad;
+	@Column
+	private String provincia;
 	
-	@ManyToOne
-    @JoinColumn(name= "id_localidad" , referencedColumnName = "idLocalidad")
-    private Localidad localidad;
+	
+	
 	
 	public Direccion () {
 		
@@ -33,6 +36,19 @@ public class Direccion {
 		this.numero = numero;
 		this.piso = piso;
 		this.dto = dto;
+	}
+	
+
+	public Direccion(Integer id_Direccion, String calle, Integer numero, Integer piso, Integer dto, String localidad,
+			String provincia) {
+		super();
+		this.id_Direccion = id_Direccion;
+		this.calle = calle;
+		this.numero = numero;
+		this.piso = piso;
+		this.dto = dto;
+		this.localidad = localidad;
+		this.provincia = provincia;
 	}
 
 	public Integer getId_Direccion() {
@@ -74,13 +90,33 @@ public class Direccion {
 		this.dto = dto;
 	}
 
-	public Localidad getLocalidad() {
+	public String getLocalidad() {
 		return localidad;
 	}
 
-	public void setLocalidad(Localidad localidad) {
+	public void setLocalidad(String localidad) {
 		this.localidad = localidad;
 	}
+
+	public String getProvincia() {
+		return provincia;
+	}
+
+	public void setProvincia(String provincia) {
+		this.provincia = provincia;
+	}
+
+	
+	
+	
 }
+//public Localidad getLocalidad() {
+	//	return localidad;
+	//}
 
-
+	//public void setLocalidad(Localidad localidad) {
+	//	this.localidad = localidad;
+	//}
+//@ManyToOne
+	//@JoinColumn(name= "id_localidad" , referencedColumnName = "idLocalidad")
+  //private Localidad localidad;

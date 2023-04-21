@@ -23,6 +23,7 @@ C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\dto\MecanicoDTO.java
 C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\gestor\GestorTarea.java
 C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\gui\ListadoTareasGUI.java
 C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\dominio\Cliente.java
+C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\dominio\MecanicoDireccion.java
 C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\app\App.java
 C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\gestor\GestorAuto.java
 C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\dao\PersonaDAO_Hibernate.java
@@ -40,11 +41,14 @@ C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\gui\AltaMecanicoGUI.j
 C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\gestor\GestorCloseSessionsBD.java
 C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\dominio\ItemTarea.java
 C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\dominio\Repuesto.java
+C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\dominio\ClienteDireccion.java
 C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\gestor\GestorProvincia.java
 C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\dto\ClienteDTO.java
 C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\gui\GestionMecanicosGUI.java
+C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\gui\SoporteGUI.java
 C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\gui\MenuPrincipal.java
 C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\gui\AltaClienteGUI.java
+C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\dominio\ProvinciaLocalidad.java
 C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\dominio\Tarea.java
 C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\dao\AutoDAO.java
 C:\Users\USER\eclipse-workspace\tareasTaller\src\main\java\dao\LocalidadDAO_Hibernate.java

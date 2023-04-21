@@ -3,6 +3,9 @@ package dao;
 import java.util.List;
 
 import dominio.Cliente;
+import dominio.ClienteDireccion;
+import dominio.Direccion;
+import dominio.Persona;
 import util.ConnectionBD;
 
 import javax.persistence.*;
@@ -60,6 +63,32 @@ public class ClienteDAO_Hibernate implements ClienteDAO {
 		
 		if(lista.size()==0)return null;
 		else return lista.get(0);
+	}
+
+	@Override
+	public ClienteDireccion getClientesDirecciones() {
+		ClienteDireccion cdaux = new ClienteDireccion();
+		manager = ConnectionBD.conectar();
+		List<Cliente> listac = manager.createQuery("select c from cliente c", Cliente.class).getResultList();
+		List<Direccion> listad = manager.createQuery("select d from direccion d", Direccion.class).getResultList();		
+		manager.close();
+		cdaux.setClientes(listac);
+		cdaux.setDirecciones(listad);
+		return cdaux;
+	}
+
+	@Override
+	public Cliente verificarClienteDNI(String text) {
+		manager = ConnectionBD.conectar();
+		PersonaDAO pdao = new PersonaDAO_Hibernate();
+		Persona p = pdao.recuperarPersonaDNI(text, manager);
+		
+		if(p==null) {
+			manager.close();
+			return null;
+		}
+		
+		return recuperarClienteIDPersona(p.getIdpersona());
 	}
 
 }

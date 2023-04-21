@@ -25,11 +25,11 @@ public class GestorAuto {
 		
 		Auto a = new Auto();
 		a.inicializarAuto(autodto.getPatente(),autodto.getMarca(),autodto.getModelo(),c);
-		System.out.println("puntero auto: "+a);
-		System.out.println(a.getMarca().toString());
-		System.out.println(a.getModelo().toString());
-		System.out.println(a.getPatente().toString());
-		System.out.println(a.getCliente());
+		//System.out.println("puntero auto: "+a);
+		//System.out.println(a.getMarca().toString());
+		//System.out.println(a.getModelo().toString());
+		//System.out.println(a.getPatente().toString());
+		//System.out.println(a.getCliente());
 	
 		daoAuto.guardarAuto(a);
 	}
@@ -42,7 +42,7 @@ public class GestorAuto {
 		
 		String exp6 = "[A-Z]{1}[A-Z]{1}[A-Z]{1}[0-9]{1}[0-9]{1}[0-9]{1}";
 		String exp7 = "[A-Z]{1}[A-Z]{1}[0-9]{1}[0-9]{1}[0-9]{1}[A-Z]{1}[A-Z]";
-		String expM = "[a-zA-Z]+";
+		String expM = "^[a-zA-Z0-9]+";
 		
 		Pattern formatoPatente6 = Pattern.compile(exp6);
 		Pattern formatoPatente7 = Pattern.compile(exp7);
@@ -51,10 +51,14 @@ public class GestorAuto {
 			mensaje +=" Marca (Ej: Fiat)"+"\n";
 			marca=false;
 		}*/
+		String[] modelos = textModelo.getText().toString().split(" ");
 		
-		if(!formatoM.matcher((CharSequence) textModelo.getText()).matches()) {
-			mensaje +=" Modelo (Ej: Punto)"+"\n";
-			modelo=false;
+		for(String s : modelos) {
+			if(!formatoM.matcher((CharSequence) s).matches()) {
+				mensaje +=" Modelo (Ej: Punto o 208)"+"\n";
+				modelo=false;
+				break;
+			}
 		}
 		
 		if (textPatente.getText().toString().length() != 6

@@ -3,6 +3,7 @@ package dao;
 import java.util.List;
 
 import dominio.Provincia;
+import dominio.ProvinciaLocalidad;
 
 public interface ProvinciaDAO {
 	void recuperarProvinciaNombre(String prov);
@@ -12,4 +13,6 @@ public interface ProvinciaDAO {
 	List<Provincia> recuperarProvincias();
 
 	void cargarProvinciasBD();
+
+	ProvinciaLocalidad recuperarProvinciasLocalidades();
 }

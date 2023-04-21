@@ -5,6 +5,7 @@ import java.util.List;
 import dao.ProvinciaDAO;
 import dao.ProvinciaDAO_Hibernate;
 import dominio.Provincia;
+import dominio.ProvinciaLocalidad;
 
 public class GestorProvincia {
 
@@ -22,6 +23,10 @@ public class GestorProvincia {
 	public void cargarProvinciasBD() {
 		daoProvincias.cargarProvinciasBD();
 		
+	}
+
+	public ProvinciaLocalidad recuperarProvinciasLocalidades() {
+		return daoProvincias.recuperarProvinciasLocalidades();
 	}
 
 }

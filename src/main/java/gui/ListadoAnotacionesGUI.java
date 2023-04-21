@@ -196,6 +196,7 @@ public class ListadoAnotacionesGUI extends JFrame {
 							}
 							table.repaint();
 						}
+						
 						else {
 							JOptionPane.showMessageDialog(null, 
 					                "No se encontraron anotaciones con la palabra clave: "+palabra.toUpperCase(), 
@@ -231,7 +232,12 @@ public class ListadoAnotacionesGUI extends JFrame {
 
 				}
 			});
-			
+		btnVolver.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		}
 	
 	

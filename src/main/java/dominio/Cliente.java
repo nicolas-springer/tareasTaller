@@ -35,6 +35,8 @@ public class Cliente {
 		this.setPersona(persona);
 	}
 
-	
+	public Direccion getDireccionPersona() {
+		return persona.getDireccion();
+	}
 
 }

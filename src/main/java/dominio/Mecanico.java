@@ -54,6 +54,8 @@ public class Mecanico {
 		this.especialidad = especialidad;
 	}
 
-	
+	public Direccion getDireccionPersona() {
+		return persona.getDireccion();
+	}
 
 }

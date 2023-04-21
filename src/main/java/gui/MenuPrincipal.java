@@ -21,6 +21,8 @@ import java.awt.Color;
 import javax.swing.border.TitledBorder;
 
 import javax.swing.border.EtchedBorder;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 @SuppressWarnings("serial")
 public class MenuPrincipal extends JFrame {
@@ -186,6 +188,11 @@ public class MenuPrincipal extends JFrame {
 		panel.add(lblReloj);
 		lblReloj.setFont(new Font("Tahoma", Font.PLAIN, 26));
 		
+		JButton btnSoporte = new JButton("Soporte técnico");
+		btnSoporte.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnSoporte.setBounds(1026, 103, 180, 35);
+		contentPane.add(btnSoporte);
+		
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM);
         new Timer().scheduleAtFixedRate(new TimerTask() {
@@ -287,7 +294,12 @@ public class MenuPrincipal extends JFrame {
 			}
 		});
 
-		
+		btnSoporte.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				SoporteGUI soporte = new SoporteGUI();
+				soporte.setVisible(true);
+			}
+		});
 		
 		
 	}

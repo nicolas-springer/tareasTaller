@@ -123,7 +123,7 @@ public class GenerarTareaGUI extends JFrame {
 		contentPane.add(comboBox);
 		
 		for(Mecanico m : listaMecanicos) {
-			comboBox.addItem(m.getPersona().getNombre()+" "+m.getPersona().getApellido()+" | "+m.getPersona().getNumeroDocumento());
+			comboBox.addItem(m.getPersona().getNombre()+" "+m.getPersona().getApellido()+" | "+m.getPersona().getNumeroDocumento()+" | "+m.getEspecialidad().toUpperCase());
 		}
 		
 		JLabel lblNewLabel_3 = new JLabel("Descripcion para la tarea:");
@@ -216,11 +216,10 @@ public class GenerarTareaGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			
 			if(btnAgregarAuto.isEnabled()) { 
-				CargarAutoGUI carga = new CargarAutoGUI(clienteAux);
+				CargarAutoGUI carga = new CargarAutoGUI(clienteAux.getPersona().getNombre(),clienteAux.getPersona().getApellido(),clienteAux.getPersona().getNumeroDocumento().toString());
 				try {
 					carga.setVisible(true);
 				} catch (Exception e2) {
-					// TODO: handle exception
 				} finally {
 					if(!carga.isActive()) {				
 						model.getDataVector().removeAllElements();
@@ -325,7 +324,6 @@ public class GenerarTareaGUI extends JFrame {
 	
 	protected boolean verificarvacios(Cliente clienteAux2, Auto autoTarea2, Mecanico mecanicoAsignado2,
 			String descripcionProblema, Date dcdate) {
-		// TODO Auto-generated method stub
 		String mensajeerror="";
 		boolean flag=false;
 		if(clienteAux2==null) {

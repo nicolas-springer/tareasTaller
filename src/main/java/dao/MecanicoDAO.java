@@ -1,6 +1,8 @@
 package dao;
 
 import dominio.Mecanico;
+import dominio.MecanicoDireccion;
+
 import java.util.*;
 
 public interface MecanicoDAO {
@@ -12,5 +14,7 @@ public interface MecanicoDAO {
 	Mecanico recuperarMecanicoID(Integer idpersona);
 
 	List<Mecanico> recuperarMecanicosConNombre(String nombre);
+
+	MecanicoDireccion getMecanicosDirecciones();
 
 }

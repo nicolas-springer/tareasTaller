@@ -22,7 +22,7 @@ public class App {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				MenuPrincipal menuP = new MenuPrincipal();
-				menuP.setVisible(true);
+				//menuP.setVisible(true);
 				try {	
 					GestorArranqueBD gBD = new GestorArranqueBD();
 					if(gBD.localidadesCargadas()!=null) {

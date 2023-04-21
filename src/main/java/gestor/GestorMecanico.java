@@ -9,6 +9,7 @@ import javax.swing.table.DefaultTableModel;
 import dao.MecanicoDAO;
 import dao.MecanicoDAO_Hibernate;
 import dominio.Mecanico;
+import dominio.MecanicoDireccion;
 import dominio.Persona;
 import dto.MecanicoDTO;
 
@@ -51,7 +52,8 @@ public class GestorMecanico {
 
 		String mensaje = "Datos invalidos, revisar: " +"\n";
 		
-		String expression = "^[A-Z][a-z]+";
+		//String expression = "^[A-Z][a-z]+";
+		String expression = "^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+";
 		Pattern formato = Pattern.compile(expression);
 		String expDNI = "[1-9][0-9]+";
 		Pattern formatoDNI = Pattern.compile(expDNI);
@@ -64,17 +66,17 @@ public class GestorMecanico {
 		System.out.println(nombres.toString());
 		System.out.println(apellidos.toString());
 		for(String s: nombres) {
-			System.out.println(s);
+			//System.out.println(s);
 			if(!formato.matcher(s).matches()) {
-				mensaje +="Nombre (Ej: Mario ó Jose Luis)"+"\n";
+				mensaje +="Nombre (Ej: Mario ó José Luis)"+"\n";
 				nombreValido=false;
 			}
 		}
 		
 		for(String s: apellidos) {
-			System.out.println(s);
+			//System.out.println(s);
 			if(!formato.matcher(s).matches()) {
-				mensaje +="Apellido (Ej: Mendez ó Del Valle)"+"\n";
+				mensaje +="Apellido (Ej: Méndez ó Del Valle)"+"\n";
 				nombreValido=false;
 			}
 		}
@@ -133,6 +135,10 @@ public class GestorMecanico {
 
 	public List<Mecanico> recuperarMecanicosConNombre(String nombre) {
 		return daoMecanico.recuperarMecanicosConNombre(nombre);
+	}
+
+	public MecanicoDireccion getMecanicosDirecciones() {
+			return daoMecanico.getMecanicosDirecciones();
 	}
 	
 }

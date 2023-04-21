@@ -9,6 +9,7 @@ import javax.swing.JTextField;
 import dao.ClienteDAO;
 import dao.ClienteDAO_Hibernate;
 import dominio.Cliente;
+import dominio.ClienteDireccion;
 import dominio.Persona;
 import dto.ClienteDTO;
 import dominio.Auto;
@@ -51,22 +52,31 @@ public class GestorCliente {
 
 		String mensaje = "Datos invalidos, revisar: " +"\n";
 		
-		String expression = "^[A-Z][a-z]+";
-		
+		//String expression = "^[A-Z][a-z]+";
+		String expression = "^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+";
 		Pattern formato = Pattern.compile(expression);
 		String expDNI = "[1-9][0-9]+";
 		Pattern formatoDNI = Pattern.compile(expDNI);
 
 		String expTelefono = "[1-9][0-9]+";
 		Pattern formatoTel = Pattern.compile(expTelefono);
-		if(!formato.matcher((CharSequence) textFieldApellido.getText()).matches()) {
-			mensaje +="Apellido (Ej: Perez)"+"\n";
-			apellidoValido=false;
-		}
 		
-		if(!formato.matcher((CharSequence) textFieldNombre.getText()).matches()) {
-			mensaje +="Nombre (Ej: Mario)"+"\n";
-			nombreValido=false;
+		String[] nombres = textFieldNombre.getText().toString().split(" ");
+		String[] apellidos = textFieldApellido.getText().toString().split(" ");
+		
+		for(String s: apellidos) {
+			//System.out.println(s);
+			if(!formato.matcher(s).matches()) {
+				mensaje +="Apellido (Ej: Méndez ó Del Valle)"+"\n";
+				nombreValido=false;
+			}
+		}
+		for(String s: nombres) {
+			//System.out.println(s);
+			if(!formato.matcher(s).matches()) {
+				mensaje +="Nombre (Ej: Mario ó José Luis)"+"\n";
+				nombreValido=false;
+			}
 		}
 		
 		if(!formatoDNI.matcher((CharSequence) textFieldDNI.getText()).matches()) {
@@ -124,16 +134,22 @@ public class GestorCliente {
 	public List<Auto> recuperarAutosClienteDNI(String dni) {
 		GestorAuto gAuto = new GestorAuto();
 		
-		Cliente c = daoCliente.recuperarClienteIDPersona(gestorPersona.recuperarPersonaDNI(dni).getIdpersona());
-		return gAuto.recuperarAutosDeClienteID(c.getIdCliente());
+		//Cliente c = daoCliente.recuperarClienteIDPersona(gestorPersona.recuperarPersonaDNI(dni).getIdpersona()); 
+		return gAuto.recuperarAutosDeClienteID(recuperarClienteDNI(dni).getIdCliente());
 	}
 
 
 	public Cliente recuperarClienteDNI(String text) {
-		Persona p = gestorPersona.recuperarPersonaDNI(text);
+		/*Persona p = gestorPersona.recuperarPersonaDNI(text);
 		if (p==null) {
 			return null;
-		}else return daoCliente.recuperarClienteIDPersona(p.getIdpersona());
+		}else return daoCliente.recuperarClienteIDPersona(p.getIdpersona());*/
+		return daoCliente.verificarClienteDNI(text);
+	}
+
+
+	public ClienteDireccion getClientesDirecciones() {
+		return daoCliente.getClientesDirecciones();
 	}
 
 	

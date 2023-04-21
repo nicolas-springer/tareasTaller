@@ -22,6 +22,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import dominio.Cliente;
+import dominio.ClienteDireccion;
 import dominio.Direccion;
 import dominio.Localidad;
 import dominio.Mecanico;
@@ -35,10 +36,11 @@ public class ListadoClientesGUI extends JFrame {
 	private JPanel contentPane;
 	private JTextField textFieldBusqueda;
 	private JTable table;
-	List<Cliente> listaClientes;
+	//List<Cliente> listaClientes;
+	ClienteDireccion cd;
 	public ListadoClientesGUI() {
 
-			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			setBounds(300, 150, 1280, 720);
 			setResizable(false);
 			setTitle("Gestion Clientes");
@@ -82,18 +84,37 @@ public class ListadoClientesGUI extends JFrame {
 			DefaultTableModel model = new DefaultTableModel();
 			
 			final GestorCliente gCliente= new GestorCliente();
-			listaClientes = gCliente.recuperarClientes();
-			final GestorDireccion gDireccion = new GestorDireccion();
-			final GestorLocalidad gLocalidad = new GestorLocalidad();
+			//listaClientes = gCliente.recuperarClientes();
+			//final GestorDireccion gDireccion = new GestorDireccion();
+			//final GestorLocalidad gLocalidad = new GestorLocalidad();
+			
+			cd = gCliente.getClientesDirecciones();
 			
 			for (String s : colTareas) model.addColumn(s);
 
-			for(Cliente c : listaClientes) {
-				Direccion d = gDireccion.recuperarDireccion(c.getPersona().getDireccion().getId_Direccion());
-				Localidad l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
+			for(Cliente c : cd.getClientes()) {
+				//Direccion d = gDireccion.recuperarDireccion(c.getPersona().getDireccion().getId_Direccion());
+				//Localidad l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
+				String calle="";
+				String numero="";
+				String piso="";
+				String dpto ="";
+				String localidad ="";
+				for(Direccion d : cd.getDirecciones()) {	
+					if(d.getId_Direccion() == c.getPersona().getDireccion().getId_Direccion()) {
+						System.out.println(d.getId_Direccion());
+						calle=d.getCalle();
+						numero=d.getNumero().toString();
+						piso=d.getPiso().toString();
+						dpto= d.getDto().toString();
+						localidad=d.getLocalidad();
+						break;
+					}	
+				}
+				
 				model.addRow(new Object[]{c.getPersona().getApellido(),c.getPersona().getNombre(),
 						c.getPersona().getNumeroDocumento(),c.getPersona().getTelefono(),
-						d.getCalle(),d.getNumero(),d.getPiso(),d.getPiso(),l.getNombre()});
+						calle,numero,piso,dpto,localidad});
 			}
 			
 			table = new JTable(model);
@@ -155,12 +176,37 @@ public class ListadoClientesGUI extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					model.getDataVector().removeAllElements();
 					model.fireTableDataChanged();
-					for(Cliente c : listaClientes) {
+					cd = gCliente.getClientesDirecciones();
+					/*for(Cliente c : cd.getClientes()) {
 						Direccion d = gDireccion.recuperarDireccion(c.getPersona().getDireccion().getId_Direccion());
-						Localidad l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
+						//Localidad l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
 						model.addRow(new Object[]{c.getPersona().getApellido(),c.getPersona().getNombre(),
 								c.getPersona().getNumeroDocumento(),c.getPersona().getTelefono(),
-								d.getCalle(),d.getNumero(),d.getPiso(),d.getPiso(),l.getNombre()});
+								d.getCalle(),d.getNumero(),d.getPiso(),d.getDto(),d.getLocalidad()});
+					}*/
+					for(Cliente c : cd.getClientes()) {
+						//Direccion d = gDireccion.recuperarDireccion(c.getPersona().getDireccion().getId_Direccion());
+						//Localidad l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
+						String calle="";
+						String numero="";
+						String piso="";
+						String dpto ="";
+						String localidad ="";
+						for(Direccion d : cd.getDirecciones()) {	
+							if(d.getId_Direccion() == c.getPersona().getDireccion().getId_Direccion()) {
+								System.out.println(d.getId_Direccion());
+								calle=d.getCalle();
+								numero=d.getNumero().toString();
+								piso=d.getPiso().toString();
+								dpto= d.getDto().toString();
+								localidad=d.getLocalidad();
+								break;
+							}	
+						}
+						
+						model.addRow(new Object[]{c.getPersona().getApellido(),c.getPersona().getNombre(),
+								c.getPersona().getNumeroDocumento(),c.getPersona().getTelefono(),
+								calle,numero,piso,dpto,localidad});
 					}
 					table.repaint();
 				}
@@ -170,13 +216,10 @@ public class ListadoClientesGUI extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					
 					int key = comboBox.getSelectedIndex();
-					List<Mecanico> lista;
+					//List<Mecanico> lista;
 					boolean existe = false;
-					Direccion d;
-					Localidad l;
 					switch (key) {
 					case 0:
-						
 						String nombre= textFieldBusqueda.getText().toString();
 						if(nombre.length()==0) {
 							JOptionPane.showMessageDialog(null, 
@@ -187,19 +230,33 @@ public class ListadoClientesGUI extends JFrame {
 						else {
 								model.getDataVector().removeAllElements();
 								model.fireTableDataChanged();
-								for(Cliente c : listaClientes) {
+								for(Cliente c : cd.getClientes()) {
 									if(c.getPersona().getNombre().toString().toLowerCase().equals(nombre.toLowerCase()))
 									{
 										existe=true;
-									d = gDireccion.recuperarDireccion(c.getPersona().getDireccion().getId_Direccion());
-									l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
-									model.addRow(new Object[]{c.getPersona().getApellido(),c.getPersona().getNombre(),
-											c.getPersona().getNumeroDocumento(),c.getPersona().getTelefono(),
-											d.getCalle(),d.getNumero(),d.getPiso(),d.getPiso(),l.getNombre()});
+										String calle="";
+										String numero="";
+										String piso="";
+										String dpto ="";
+										String localidad ="";
+										for(Direccion dx : cd.getDirecciones()) {	
+											if(dx.getId_Direccion() == c.getPersona().getDireccion().getId_Direccion()) {
+												//System.out.println(dx.getId_Direccion());
+												calle=dx.getCalle();
+												numero=dx.getNumero().toString();
+												piso=dx.getPiso().toString();
+												dpto= dx.getDto().toString();
+												localidad=dx.getLocalidad();
+												break;
+											}	
+										}
+										
+										model.addRow(new Object[]{c.getPersona().getApellido(),c.getPersona().getNombre(),
+												c.getPersona().getNumeroDocumento(),c.getPersona().getTelefono(),
+												calle,numero,piso,dpto,localidad});
 									}
 								}
 								if(existe)
-									
 									{
 									table.repaint();
 									}
@@ -225,16 +282,31 @@ public class ListadoClientesGUI extends JFrame {
 							
 								model.getDataVector().removeAllElements();
 								model.fireTableDataChanged();
-								for(Cliente c: listaClientes) {
-									if(c.getPersona().getApellido().toString().toLowerCase().equals(apellido.toLowerCase())) {
+								for(Cliente c : cd.getClientes()) {
+									if(c.getPersona().getNombre().toString().toLowerCase().equals(apellido.toLowerCase()))
+									{
 										existe=true;
-										d = gDireccion.recuperarDireccion(c.getPersona().getDireccion().getId_Direccion());
-										l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
+										String calle="";
+										String numero="";
+										String piso="";
+										String dpto ="";
+										String localidad ="";
+										for(Direccion dx : cd.getDirecciones()) {	
+											if(dx.getId_Direccion() == c.getPersona().getDireccion().getId_Direccion()) {
+												//System.out.println(dx.getId_Direccion());
+												calle=dx.getCalle();
+												numero=dx.getNumero().toString();
+												piso=dx.getPiso().toString();
+												dpto= dx.getDto().toString();
+												localidad=dx.getLocalidad();
+												break;
+											}	
+										}
+										
 										model.addRow(new Object[]{c.getPersona().getApellido(),c.getPersona().getNombre(),
 												c.getPersona().getNumeroDocumento(),c.getPersona().getTelefono(),
-												d.getCalle(),d.getNumero(),d.getPiso(),d.getPiso(),l.getNombre()});
+												calle,numero,piso,dpto,localidad});
 									}
-									
 								}
 								if(existe)
 									
@@ -279,14 +351,30 @@ public class ListadoClientesGUI extends JFrame {
 									model.getDataVector().removeAllElements();
 								
 									model.fireTableDataChanged();
-									for(Cliente c: listaClientes) {
-										if(c.getPersona().getNumeroDocumento().toString().equals(dni)) {
+									for(Cliente c : cd.getClientes()) {
+										if(c.getPersona().getNombre().toString().toLowerCase().equals(dni))
+										{
 											existe=true;
-											d = gDireccion.recuperarDireccion(c.getPersona().getDireccion().getId_Direccion());
-											l = gLocalidad.recuperarLocalidadID(d.getLocalidad().getIdLocalidad());
+											String calle="";
+											String numero="";
+											String piso="";
+											String dpto ="";
+											String localidad ="";
+											for(Direccion dx : cd.getDirecciones()) {	
+												if(dx.getId_Direccion() == c.getPersona().getDireccion().getId_Direccion()) {
+													//System.out.println(dx.getId_Direccion());
+													calle=dx.getCalle();
+													numero=dx.getNumero().toString();
+													piso=dx.getPiso().toString();
+													dpto= dx.getDto().toString();
+													localidad=dx.getLocalidad();
+													break;
+												}	
+											}
+											
 											model.addRow(new Object[]{c.getPersona().getApellido(),c.getPersona().getNombre(),
 													c.getPersona().getNumeroDocumento(),c.getPersona().getTelefono(),
-													d.getCalle(),d.getNumero(),d.getPiso(),d.getPiso(),l.getNombre()});
+													calle,numero,piso,dpto,localidad});
 										}
 									}
 									if(existe)

@@ -36,7 +36,7 @@ public class CargarAutoGUI extends JFrame {
 
 	GestorAuto gAuto = new GestorAuto();
 	
-	public CargarAutoGUI(Cliente clienteAux) {
+	public CargarAutoGUI(String nombre, String apellido, String dni) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 320);
 		setTitle("Asignar vehiculo");
@@ -50,7 +50,8 @@ public class CargarAutoGUI extends JFrame {
 		lblNewLabel.setBounds(10, 11, 180, 14);
 		contentPane.add(lblNewLabel);
 		
-		JLabel lblClienteNombre = new JLabel(clienteAux.getPersona().getNombre()+" "+clienteAux.getPersona().getApellido() );
+		//JLabel lblClienteNombre = new JLabel(clienteAux.getPersona().getNombre()+" "+clienteAux.getPersona().getApellido() );
+		JLabel lblClienteNombre = new JLabel(nombre+" "+apellido);
 		lblClienteNombre.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblClienteNombre.setBounds(20, 36, 170, 14);
 		contentPane.add(lblClienteNombre);
@@ -104,6 +105,7 @@ public class CargarAutoGUI extends JFrame {
 		comboBox.addItem("Chery");
 		comboBox.addItem("BMW");
 		comboBox.addItem("Ram");
+		comboBox.addItem("Utilitario");
 		contentPane.add(comboBox);
 		
 		btnAgregarAuto.addActionListener(new ActionListener() {
@@ -127,7 +129,8 @@ public class CargarAutoGUI extends JFrame {
 							autodto.setMarca(comboBox.getSelectedItem().toString());
 							autodto.setModelo(textModelo.getText().toString());
 							autodto.setPatente(textPatente.getText().toString());
-							autodto.setDnicliente(clienteAux.getPersona().getNumeroDocumento().toString());
+							//autodto.setDnicliente(clienteAux.getPersona().getNumeroDocumento().toString());
+							autodto.setDnicliente(dni);
 							try {
 								gAuto.darDeAltaAuto(autodto);
 								JOptionPane.showMessageDialog(null, "Datos cargados correctamente");

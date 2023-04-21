@@ -4,7 +4,9 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import dominio.Localidad;
 import dominio.Provincia;
+import dominio.ProvinciaLocalidad;
 import util.ConnectionBD;
 
 public class ProvinciaDAO_Hibernate implements ProvinciaDAO{
@@ -40,6 +42,21 @@ public class ProvinciaDAO_Hibernate implements ProvinciaDAO{
 	public void cargarProvinciasBD() {
 		// TODO Auto-generated method stub
 		//chequear que existan provincias cargas, sino cargarlas con txt de meta-inf
+		
+	}
+	@Override
+	public ProvinciaLocalidad recuperarProvinciasLocalidades() {
+		manager = ConnectionBD.conectar();
+		ProvinciaLocalidad plaux = new ProvinciaLocalidad();
+		List<Provincia> listap = manager.createQuery(
+				 "SELECT p FROM provincia p ", Provincia.class ).getResultList();
+		List<Localidad> listal = manager.createQuery(
+				 "SELECT l FROM localidad l ", Localidad.class ).getResultList();
+		
+		manager.close();
+		plaux.setLocalidades(listal);
+		plaux.setProvincias(listap);
+		return plaux;
 		
 	}
 	

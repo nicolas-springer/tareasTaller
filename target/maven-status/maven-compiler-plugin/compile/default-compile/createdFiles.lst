@@ -11,6 +11,7 @@ gui\MenuPrincipal$10.class
 dao\MecanicoDAO_Hibernate.class
 gui\ListadoAnotacionesGUI$2.class
 gui\Principal$3.class
+dominio\MecanicoDireccion.class
 dto\ClienteDTO.class
 gui\AltaClienteGUI$1.class
 gui\ListadoTareasGUI$9.class
@@ -26,9 +27,11 @@ gui\ListadoTareasGUI$11.class
 gui\MenuPrincipal$8.class
 gui\CargarAutoGUI.class
 gui\ListadoClientesGUI.class
+gui\SoporteGUI.class
 dao\DireccionDAO_Hibernate.class
 gui\AltaMecanicoGUI$2.class
 gui\Principal$4.class
+gui\AltaClienteGUI$3.class
 dominio\Anotacion.class
 gui\MenuPrincipal$4.class
 gestor\GestorAnotacion.class
@@ -45,6 +48,7 @@ gestor\GestorPersona.class
 dominio\Tarea.class
 dto\MecanicoDTO.class
 gui\MenuPrincipal$3.class
+gui\ListadoAnotacionesGUI$4.class
 dominio\Cliente.class
 dominio\ItemTarea.class
 dao\PersonaDAO.class
@@ -52,10 +56,13 @@ gui\ListadoTareasGUI$5.class
 dominio\Repuesto.class
 gui\AltaMecanicoGUI.class
 enumClasses\EstadoTarea.class
+gui\SoporteGUI$1.class
 gui\ListadoTareasGUI$10.class
 gui\ListadoMecanicosGUI.class
+gui\AltaMecanicoGUI$3.class
 gui\MenuPrincipal$9.class
 dao\ClienteDAO.class
+gui\MenuPrincipal$11.class
 gestor\GestorProvincia.class
 util\RenderListadoAnotaciones.class
 gui\ListadoTareasGUI.class
@@ -81,6 +88,7 @@ dao\ProvinciaDAO.class
 dominio\Direccion.class
 app\App$1.class
 gui\GenerarTareaGUI.class
+dominio\ClienteDireccion.class
 gui\MenuPrincipal$7.class
 gui\ListadoTareasGUI$1.class
 gui\CargarAutoGUI$1.class
@@ -90,6 +98,7 @@ gui\Principal$1.class
 gui\GenerarTareaGUI$2.class
 gestor\GestorCliente.class
 gui\GestionMecanicosGUI$1.class
+dominio\ProvinciaLocalidad.class
 gui\GenerarTareaGUI$3.class
 dominio\Provincia.class
 gui\ListadoClientesGUI$3.class

@@ -1,5 +1,7 @@
 package dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import dominio.Direccion;
@@ -28,6 +30,14 @@ public class DireccionDAO_Hibernate implements DireccionDAO {
 		Direccion d = manager.createQuery("select d from direccion d where id ="+id,Direccion.class).getSingleResult();
 		manager.close();
 		return d;
+	}
+
+	@Override
+	public List<Direccion> recuperarDirecciones() {
+		manager = ConnectionBD.conectar();
+		 List<Direccion> lista= manager.createQuery("select d from direccion d",Direccion.class).getResultList();
+		manager.close();
+		return lista;
 	};
 	
 	

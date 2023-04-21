@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import dominio.Cliente;
 import dominio.Persona;
 import util.ConnectionBD;
 
@@ -48,4 +49,13 @@ public class PersonaDAO_Hibernate implements PersonaDAO {
 		else return p.get(0);
 		
 	}
+
+	@Override
+	public Persona recuperarPersonaDNI(String text, EntityManager aux) {
+		List<Persona> p =  aux
+				.createQuery("SELECT p FROM persona p WHERE numeroDocumento = '"+text+"' ",Persona.class).getResultList();
+		if(p.size() == 0) return null;
+		else return p.get(0);
+	}
+
 }

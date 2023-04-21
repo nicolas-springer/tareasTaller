@@ -1,5 +1,8 @@
 package dao;
 
+import javax.persistence.EntityManager;
+
+import dominio.Cliente;
 import dominio.Persona;
 
 public interface PersonaDAO {
@@ -10,4 +13,5 @@ public interface PersonaDAO {
 
 	Persona recuperarPersonaDNI(Integer dni);
 
+	public Persona recuperarPersonaDNI(String text,EntityManager aux);
 }

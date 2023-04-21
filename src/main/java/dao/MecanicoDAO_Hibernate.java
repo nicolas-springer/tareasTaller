@@ -5,8 +5,9 @@ import java.util.List;
 import javax.persistence.*;
 
 import dominio.Anotacion;
+import dominio.Direccion;
 import dominio.Mecanico;
-
+import dominio.MecanicoDireccion;
 import util.ConnectionBD;
 
 public class MecanicoDAO_Hibernate implements MecanicoDAO{
@@ -59,6 +60,18 @@ public class MecanicoDAO_Hibernate implements MecanicoDAO{
 		List<Mecanico> lista = manager.createQuery("select m from mecanico a where nombre like '%"+nombre+"%'",Mecanico.class).getResultList();
 		manager.close();
 		return lista;
+	}
+
+	@Override
+	public MecanicoDireccion getMecanicosDirecciones() {
+		MecanicoDireccion mdaux = new MecanicoDireccion();
+		manager = ConnectionBD.conectar();
+		List<Mecanico> listam = manager.createQuery("select m from mecanico m",Mecanico.class).getResultList();
+		List<Direccion> listad = manager.createQuery("select d from direccion d",Direccion.class).getResultList();
+		mdaux.setDirecciones(listad);
+		mdaux.setMecanicos(listam);
+		manager.close();
+		return mdaux;
 	}
 
 

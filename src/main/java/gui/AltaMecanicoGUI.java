@@ -11,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 
 import dominio.Localidad;
 import dominio.Provincia;
+import dominio.ProvinciaLocalidad;
 import dto.MecanicoDTO;
 import gestor.GestorDireccion;
 import gestor.GestorLocalidad;
@@ -47,8 +48,8 @@ public class AltaMecanicoGUI extends JFrame {
 
 	GestorProvincia gestorProvincia = new GestorProvincia();
 	GestorLocalidad gestorLocalidad = new GestorLocalidad();
-	
-	List<Provincia> listaProvinciasArg = gestorProvincia.recuperarProvincias();
+	ProvinciaLocalidad pl = gestorProvincia.recuperarProvinciasLocalidades();
+	//List<Provincia> listaProvinciasArg = gestorProvincia.recuperarProvincias();
 	
 	GestorMecanico gMecanico = new GestorMecanico();
 	GestorDireccion gDireccion = new GestorDireccion();
@@ -91,9 +92,13 @@ public class AltaMecanicoGUI extends JFrame {
 		comboBoxProvincias.setBounds(90, 121, 118, 22);
 		contentPane.add(comboBoxProvincias);
 		//comboBoxProvincias.addItem("Santa Fe");
-		for (Provincia p : listaProvinciasArg) {
+		for (Provincia p : pl.getProvincias()) {
 			comboBoxProvincias.addItem(p.getNombre().toString());
 		}
+		//cargar por default localidades santa fe
+		comboBoxProvincias.setSelectedItem("Santa Fe");
+		
+		
 		
 		JLabel lblNewLabel_5 = new JLabel("Localidad:");
 		lblNewLabel_5.setBounds(218, 125, 68, 14);
@@ -181,26 +186,38 @@ public class AltaMecanicoGUI extends JFrame {
 		contentPane.add(textFieldTelefono);
 		textFieldTelefono.setColumns(10);
 		
-		
+		for (Localidad l : pl.getLocalidades()) {
+			if(l.getProvincia().getNombre().equals("Santa Fe"))
+				{
+				comboBoxLocalidad.addItem(l.getNombre().toString());
+				}
+		}
 		//al seleccionar una provincia del drop box se van a mostrar las localidades de dicha provincia
 		comboBoxProvincias.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 
 					comboBoxLocalidad.removeAllItems();
-
-					List<Localidad> localidadesSegunProvincia = gestorLocalidad
-							.obtenerLocalidades(comboBoxProvincias.getSelectedItem().toString());
-
-					for (Localidad l : localidadesSegunProvincia)
-						comboBoxLocalidad.addItem(l.getNombre().toString());
+					//List<Localidad> localidadesSegunProvincia = gestorLocalidad.obtenerLocalidades(comboBoxProvincias.getSelectedItem().toString());
+					String saux = comboBoxProvincias.getSelectedItem().toString();
+					for (Localidad l : pl.getLocalidades()) {
+						if(l.getProvincia().getNombre().equals(saux))
+							{
+							comboBoxLocalidad.addItem(l.getNombre().toString());
+							}
+					}
 
 				}
 
 			}
 		});
 
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		
 		btnDarAlta.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -238,9 +255,9 @@ public class AltaMecanicoGUI extends JFrame {
 							mecDTO.setCalle(textFieldCalle.getText().toString());
 							mecDTO.setNumeroCalle(Integer.parseInt(textFieldNumero.getText().toString()));
 							mecDTO.setLocalidad(comboBoxLocalidad.getSelectedItem().toString());
-							System.out.println(comboBoxLocalidad.getSelectedItem().toString());
+							//System.out.println(comboBoxLocalidad.getSelectedItem().toString());
 							mecDTO.setProvincia(comboBoxProvincias.getSelectedItem().toString());
-							System.out.println(comboBoxProvincias.getSelectedItem().toString());
+							//System.out.println(comboBoxProvincias.getSelectedItem().toString());
 							
 							//en caso de no vivir en departamento se asigna 0 como valor default
 							if (!textFieldDepto.getText().isEmpty())
